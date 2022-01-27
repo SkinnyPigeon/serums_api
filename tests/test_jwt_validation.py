@@ -26,6 +26,7 @@ def test_validation_validates_real_token():
     assert results['status_code'] == 200
 
 
+@pytest.mark.skip(reason="The JWT will be stop working")
 def test_validation_catches_malformed_token():
     results = validate_jwt(JWT[2:])
     assert results['status_code'] == 422
