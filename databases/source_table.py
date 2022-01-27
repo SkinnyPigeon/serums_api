@@ -34,7 +34,7 @@ class USTAN_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'ustan'}
     id = Column(BigInteger, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     chi = Column(BigInteger)
 
 
@@ -42,7 +42,7 @@ class USTAN_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
     __table_args__ = {'schema': 'ustan'}
     id = Column(Integer, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     staff_id = Column(Integer)
     name = Column(String)
     department_id = Column(Integer)
@@ -248,7 +248,7 @@ class USTAN_ML_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'ustan_ml'}
     id = Column(BigInteger, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     chi = Column(BigInteger)
 
 
@@ -437,7 +437,7 @@ class FCRB_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(BigInteger, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     patnr = Column(BigInteger)
 
 
@@ -445,7 +445,7 @@ class FCRB_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
     __table_args__ = {'schema': 'fcrb'}
     id = Column(Integer, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     staff_id = Column(Integer)
     name = Column(String)
     department_id = Column(Integer)
@@ -621,7 +621,7 @@ class ZMC_Serums_IDs(Base):
     __tablename__ = 'serums_ids'
     __table_args__ = {'schema': 'zmc'}
     id = Column(BigInteger, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     patnr = Column(BigInteger)
 
 
@@ -629,7 +629,7 @@ class ZMC_Hospital_Doctors(Base):
     __tablename__ = 'hospital_doctors'
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
-    serums_id = Column(Integer)
+    serums_id = Column(Integer, unique=True)
     staff_id = Column(Integer)
     name = Column(String)
     department_id = Column(Integer)
