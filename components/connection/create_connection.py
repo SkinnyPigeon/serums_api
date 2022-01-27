@@ -7,7 +7,7 @@ PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
 
 
-def setup_connection(schema):
+def setup_connection(schema: str):
     """Creates a connection to the database.
             Parameters:
 

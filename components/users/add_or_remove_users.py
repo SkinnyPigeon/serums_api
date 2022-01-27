@@ -3,7 +3,7 @@ from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
 
 
-def select_source_patient_id_name(schema):
+def select_source_patient_id_name(schema: str):
     """Selects the correct column name for the patient id column. \
        Different hospitals use different names for the patient id \
        column within their systems. This allows the Serums API to \
@@ -29,7 +29,7 @@ def select_source_patient_id_name(schema):
                     return str(column).split(".")[1]
 
 
-def get_id_table_class(schema, base):
+def get_id_table_class(schema: str, base):
     """Selects the class object for the id table
 
             Parameters:
@@ -45,7 +45,7 @@ def get_id_table_class(schema, base):
             return class_name
 
 
-def remove_user(serums_id, hospital_ids):
+def remove_user(serums_id: int, hospital_ids: list):
     """Deletes a user from one or more hospital's serums_ids table.
        This instantly severs the system's ability to access the patient's \
        records even before their medical data is removed during the next \
@@ -85,7 +85,7 @@ def remove_user(serums_id, hospital_ids):
     return {"message": f"User successfully removed from {hospital_ids}"}, 200
 
 
-def add_user(serums_id, patient_id, hospital_id):
+def add_user(serums_id: int, patient_id: int, hospital_id: str):
     """Adds a user to a hospital's serums_ids table. This allows their serums \
        id to be linked to any of their available data in the data lake.
 
