@@ -1,5 +1,4 @@
 from components.connection.create_connection import setup_connection
-# from psycopg2.errors import UniqueViolation
 from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
 
@@ -115,7 +114,7 @@ def add_user(serums_id, patient_id, hospital_id):
         connection['engine'].execute(stmt)
         connection['engine'].dispose()
         return {"message": "User added correctly"}, 200
-    except IntegrityError as i:
+    except IntegrityError:
         connection['engine'].dispose()
         return {
             "message": "User with that Serums ID already exists"
