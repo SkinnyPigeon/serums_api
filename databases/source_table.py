@@ -10,7 +10,6 @@ from sqlalchemy.schema import CreateSchema
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.dialects.postgresql import ARRAY, JSON
-
 import os
 
 PORT = os.getenv('PGPORT')
@@ -27,7 +26,7 @@ schemas = ['ustan', 'ustan_ml', 'fcrb', 'zmc']
 for schema in schemas:
     if not engine.dialect.has_schema(engine, schema):
         engine.execute(CreateSchema(schema))
-        
+
 # USTAN
 
 
