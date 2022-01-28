@@ -30,8 +30,8 @@ def validate_jwt(encoded_jwt: str):
         if decoded_jwt:
             return {
                 'serums_id': decoded_jwt['userID'],
-                'hospital_id': decoded_jwt['orgID'],
-                'groupIDs': decoded_jwt['groupIDs'],
+                'hospital_id': decoded_jwt['orgID'].lower(),
+                'user_type': decoded_jwt['groupIDs'],
                 'status_code': 200
             }
     except jwt.exceptions.InvalidSignatureError as e:

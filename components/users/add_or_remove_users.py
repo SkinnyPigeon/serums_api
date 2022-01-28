@@ -101,11 +101,10 @@ def add_user(serums_id: int, patient_id: int, hospital_id: str):
                                 the action was successful plus a response \
                                 status code e.g. 200
     """
-    schema = hospital_id.lower()
-    id_column_name = select_source_patient_id_name(schema)
-    connection = setup_connection(schema)
+    id_column_name = select_source_patient_id_name(hospital_id)
+    connection = setup_connection(hospital_id)
     try:
-        serums_ids_table = get_id_table_class(schema, connection['base'])
+        serums_ids_table = get_id_table_class(hospital_id, connection['base'])
         stmt = (insert(serums_ids_table).
                 values(**{
                     id_column_name: patient_id,

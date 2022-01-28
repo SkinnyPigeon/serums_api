@@ -1,4 +1,3 @@
-from unittest import result
 from components.jwt.validate import validate_jwt
 import pytest
 
@@ -19,7 +18,7 @@ def test_validation_validates_real_token():
     expected_keys = [
         'serums_id',
         'hospital_id',
-        'groupIDs',
+        'user_type',
         'status_code'
     ]
     assert expected_keys == list(dict.fromkeys(results))
