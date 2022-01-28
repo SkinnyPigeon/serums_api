@@ -96,7 +96,7 @@ def validate_doctor(group_ids: list):
     return False
 
 
-def get_rules(jwt: str, patient_serums_id: int):
+def get_valid_tags(jwt: str, patient_serums_id: int):
     """
     Gets the rules stored on the blockchain for a given \
     patient/healthcare provider combination. Uses the JWT \
