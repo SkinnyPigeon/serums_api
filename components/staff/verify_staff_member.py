@@ -3,7 +3,15 @@ from components.staff.departments import get_department_of_staff_member
 
 
 def check_staff_member(jwt: str):
-    result = {}
+    """
+    Validates the JWT and checks that the member of staff belongs \
+    to the stated hospital
+
+        Parameters:
+            jwt (str): The JWT to be checked and validated
+        Returns:
+
+    """
     jwt_response = validate_jwt(jwt)
     if jwt_response['status_code'] == 200 \
             and 'PATIENT' not in jwt_response['groupIDs']:
@@ -12,10 +20,8 @@ def check_staff_member(jwt: str):
             jwt_response['serums_id']
         )
         if staff_response:
-            result['id'] = jwt_response['serums_id']
-            result['department_id'] = staff_response['department_id']
+            return True
         else:
-            return None
+            return False
     else:
-        return None
-    return result
+        return False

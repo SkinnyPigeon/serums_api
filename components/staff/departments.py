@@ -7,12 +7,13 @@ def get_department_of_staff_member(hospital_id: str, serums_id: int):
        for a healthcare provider.
 
             Parameters:
-                body (dict): The response body of the validate_jwt \
-                             function
+                hospital_id (str): The hospital to check the staff \
+                                   member for
+                serums_id (int): The serums id of the staff member
             Returns:
-                department_ids (list):  A list of dictionaries containing \
-                                        the details of a single staff member \
-                                        for a particular healthcare provider
+                details (dict):  A dictionary containing \
+                                 the details of a single staff member \
+                                 for a particular healthcare provider
     """
     connection = setup_connection(hospital_id)
     department_table = connection['base'].classes['hospital_doctors']
@@ -43,7 +44,8 @@ def get_departments(hospital_id):
        healthcare provider.
 
             Parameters:
-                body (dict): The request body that must include 'hospital_id'
+                hospital_id (str): The hospital to gather the staff \
+                                   details for
             Returns:
                 department_ids (list):  A list of dictionaries containing \
                                         the details of staff members for a \
@@ -76,7 +78,3 @@ def get_departments(hospital_id):
     connection['session'].close()
     connection['engine'].dispose()
     return department_ids
-
-
-def check_staff_member():
-    pass

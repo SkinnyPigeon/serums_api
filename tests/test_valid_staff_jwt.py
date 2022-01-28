@@ -53,18 +53,16 @@ wrong_id_jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
 @pytest.mark.skip(reason="The JWTs will become invalid over time")
 def test_should_validate_staff_member():
     results = check_staff_member(right_jwt)
-    expected_keys = ['id', 'department_id']
-    assert type(results) == dict
-    assert list(dict.fromkeys(results)) == expected_keys
+    assert results is True
 
 
 @pytest.mark.skip(reason="The JWTs will become invalid over time")
 def test_should_return_none_for_patient():
     results = check_staff_member(patient_jwt)
-    assert results is None
+    assert results is False
 
 
 @pytest.mark.skip(reason="The JWTs will become invalid over time")
 def test_should_return_none_for_wrong_staff_id():
     results = check_staff_member(wrong_id_jwt)
-    assert results is None
+    assert results is False
