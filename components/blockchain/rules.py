@@ -122,7 +122,7 @@ def get_valid_tags(jwt: str, patient_serums_id: int):
     """
     tags = None
     rule_ids = None
-    rules = []
+    all_rules = []
     jwt_response = validate_jwt(jwt)
     requestor_type = jwt_response['user_type']
     if validate_doctor(requestor_type):
@@ -130,11 +130,11 @@ def get_valid_tags(jwt: str, patient_serums_id: int):
             jwt_response['hospital_id'],
             jwt_response['serums_id']
         )
-        ids = [doctor['id'], doctor['department_id']]
+        ids = [doctor['serums_id'], doctor['department_id']]
         for id in ids:
-            rule = get_rules(jwt, patient_serums_id, id)
-            rules.append(rule)
-        tags = sum_up_rules(rules)
+            rules = get_rules(jwt, patient_serums_id, id)
+            all_rules.extend(rules)
+        tags = sum_up_rules(all_rules)
     if len(rules) > 0:
-        rule_ids = [rule['id'] for rule in rules]
+        rule_ids = [rule['id'] for rule in all_rules]
     return tags, rule_ids
