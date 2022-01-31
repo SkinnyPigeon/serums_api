@@ -7,7 +7,7 @@ from sqlalchemy.orm.exc import NoResultFound
 import pandas as pd
 
 
-def hospital_picker(hospital: str):
+def search_field_picker(hospital: str):
     """
     Returns a lowercased hospital id, the table name holding \
     the searchable fields, and a dictionary that maps the search \
@@ -72,7 +72,7 @@ def search_for_serums_id(body):
                        "must not be blank"
         }, 500
     schema = body['hospital_id'].lower()
-    search_fields = hospital_picker(schema)
+    search_fields = search_field_picker(schema)
     connection = setup_connection(schema)
     table_class = get_class_by_name(
         search_fields['source'],

@@ -1,10 +1,10 @@
-from components.search.search import hospital_picker, \
+from components.search.search import search_field_picker, \
                                      get_serums_id, \
                                      search_for_serums_id
 
 
 def test_can_pick_hospital():
-    result = hospital_picker('ustan')
+    result = search_field_picker('ustan')
     expected = {
         'source': 'ustan.general',
         'fields': {
