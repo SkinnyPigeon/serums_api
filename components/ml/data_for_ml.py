@@ -1,4 +1,3 @@
-from multiprocessing import connection
 from components.utils.convert_dtypes import convert_decimal_to_float, \
                                             convert_dates_to_string
 from components.connection.create_connection import setup_connection

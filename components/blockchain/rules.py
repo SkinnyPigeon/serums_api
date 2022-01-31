@@ -1,4 +1,3 @@
-from pydoc import doc
 import requests
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.jwt.validate import validate_jwt

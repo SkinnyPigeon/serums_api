@@ -3,7 +3,6 @@ from components.utils.class_search import get_class_by_name
 from components.connection.create_connection import setup_connection
 from components.utils.convert_to_dicts import tuples_as_dict
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm.exc import NoResultFound
 from components.utils.convert_dtypes import convert_dates_to_string, \
                                             convert_decimal_to_float
 from components.jwt.validate import validate_jwt
