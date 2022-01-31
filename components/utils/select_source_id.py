@@ -51,7 +51,7 @@ def select_source_patient_id_value(hospital_id, serums_id, key_name):
     """
     connection = setup_connection(hospital_id)
     id_class = get_class_by_name(
-        hospital_id + '.serums_ids',
+        hospital_id.lower() + '.serums_ids',
         connection['base']
     )
     try:

@@ -21,7 +21,7 @@ def setup_connection(schema: str):
     engine = create_engine(
         f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
     )
-    metadata = MetaData(schema=schema, bind=engine)
+    metadata = MetaData(schema=schema.lower(), bind=engine)
     metadata.reflect(engine)
     Base = automap_base(metadata=metadata)
     Base.prepare()
@@ -32,5 +32,5 @@ def setup_connection(schema: str):
         "base": Base,
         "engine": engine,
         "session": session,
-        'schema': schema
+        'schema': schema.lower()
     }

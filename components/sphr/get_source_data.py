@@ -3,6 +3,7 @@ from components.utils.class_search import get_class_by_name
 from components.connection.create_connection import setup_connection
 from components.utils.convert_to_dicts import tuples_as_dict
 from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from components.utils.convert_dtypes import convert_dates_to_string, \
                                             convert_decimal_to_float
 from components.jwt.validate import validate_jwt
@@ -191,29 +192,29 @@ def get_patient_data(serums_id: int, hospital_ids: list, tags: list, jwt: str):
             except TypeError:
                 continue
             tags = select_tags(tags_list, valid_tags)
-            connection = setup_connection(hospital_id.lower())
-            key_name = select_source_patient_id_name(hospital_id.lower())
+            connection = setup_connection(hospital_id)
+            key_name = select_source_patient_id_name(hospital_id)
             try:
                 patient_id = select_source_patient_id_value(
-                    hospital_id.lower(),
+                    hospital_id,
                     serums_id,
                     key_name
                 )
             except NoResultFound:
                 continue
-            data = select_patient_data(
-                connection,
-                tags,
-                patient_id,
-                key_name,
-                proof_id
-            )
-            connection['engine'].dispose()
-            if len(data) > 0:
-                results[hospital_id.upper()]['data'] = data
-            elif len(data) <= 0:
-                results[hospital_id.upper()]['data'] = {}
-            results[hospital_id.upper()]['tags'] = tags
+            # data = select_patient_data(
+            #     connection,
+            #     tags,
+            #     patient_id,
+            #     key_name,
+            #     proof_id
+            # )
+            # connection['engine'].dispose()
+            # if len(data) > 0:
+            #     results[hospital_id.upper()]['data'] = data
+            # elif len(data) <= 0:
+            #     results[hospital_id.upper()]['data'] = {}
+            # results[hospital_id.upper()]['tags'] = tags
         return results, proof_id
     else:
         return False, None
