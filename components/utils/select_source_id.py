@@ -1,5 +1,5 @@
 from components.connection.create_connection import setup_connection
-from components.utils.objects_to_dicts import object_as_dict
+from components.utils.convert_to_dicts import object_as_dict
 from components.utils.class_search import get_class_by_name
 from sqlalchemy.orm.exc import NoResultFound
 

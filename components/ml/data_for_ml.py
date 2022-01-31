@@ -2,7 +2,7 @@ from multiprocessing import connection
 from components.utils.convert_dtypes import convert_decimal_to_float, \
                                             convert_dates_to_string
 from components.connection.create_connection import setup_connection
-from components.utils.objects_to_dicts import object_as_dict
+from components.utils.convert_to_dicts import object_as_dict
 from components.utils.select_source_id import select_source_patient_id_name, \
                                               select_source_patient_id_value
 from sqlalchemy.orm.exc import NoResultFound

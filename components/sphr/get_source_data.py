@@ -1,4 +1,8 @@
 from control_files.tags.ustan import ustan_tags
+from components.utils.class_search import get_class_by_name
+from components.connection.create_connection import setup_connection
+from components.utils.convert_to_dicts import tuples_as_dict
+from sqlalchemy.exc import InvalidRequestError
 
 
 def tag_picker(hospital_id: str):
@@ -37,9 +41,60 @@ def select_tags(tags_list: list, request_tags: list):
     selected_tags = []
     for request_tag in request_tags:
         for tag_definition in tags_list:
-            # try:
             if tag_definition['tag'] == request_tag:
                 selected_tags.append(tag_definition)
-            # except:
-            #     pass
     return selected_tags
+
+
+def select_tabular_patient_data(tag_definition: dict,
+                                patient_id: int,
+                                key_name: str):
+    """
+    Selects the tabular data within from a hospital's source system
+
+        Parameters:
+            tag_definition (dict): A tag definition that is based on \
+                                    the valid tags in the request body
+            patient_id (int): The native patient id within \
+                                the hospital's system
+            key_name (str): The name of the patient id column within a \
+                            hospital's system
+        Returns:
+            smart_patient_health_record (DataFrame): A DataFrame containing \
+                                                     the selected patient \
+                                                     data
+    """
+    data = []
+    hospital_id = tag_definition['source'].split('.')[0]
+    connection = setup_connection(hospital_id)
+    table_class = get_class_by_name(tag_definition['source'])
+    fields = tag_definition['fields']
+    entities = []
+    for field in fields:
+        entities.append(getattr(table_class, field))
+    try:
+        result = connection['session'].query(table_class).\
+                with_entities(*entities).\
+                filter_by(**{key_name: patient_id}).all()
+        for row in result:
+            data.append(tuples_as_dict(row, fields))
+            connection['engine'].dispose()
+    except InvalidRequestError as i:
+        # This is where foreign key lookups are handled for the FCRB use case
+        foreign_key_table_class = get_class_by_name(
+            tag_definition['key_lookup']['table']
+        )
+        foreign_key = tag_definition['key_lookup']['key']
+        key_entities = []
+        key_entities.append(getattr(foreign_key_table_class, foreign_key))
+        key_result = connection['session'].query(foreign_key_table_class).\
+            with_entities(*key_entities).\
+            filter_by(**{key_name: patient_id}).all()
+        for row in key_result:
+            result = connection['session'].query(table_class).\
+                with_entities(*entities).\
+                filter_by(**{foreign_key: row[0]}).all()
+            for row in result:
+                data.append(tuples_as_dict(row, fields))
+        connection['engine'].dispose()
+    return data
