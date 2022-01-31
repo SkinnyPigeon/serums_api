@@ -1,4 +1,3 @@
-from py import process
 from components.data_vaults.data_vault import generate_boilerplate, \
                                               get_id_columns, \
                                               create_data_vault
