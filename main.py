@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse
 
 description = """
