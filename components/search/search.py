@@ -1,4 +1,3 @@
-import pandas as pd
 from components.connection.create_connection import setup_connection
 from control_files.search_details.ustan import ustan_patient_details
 
