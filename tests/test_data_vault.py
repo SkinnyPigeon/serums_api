@@ -1,4 +1,12 @@
-from components.data_vaults.data_vault import generate_boilerplate
+from components.data_vaults.data_vault import generate_boilerplate, \
+                                              get_id_columns
+
+
+def test_get_id_columns():
+    result_one = get_id_columns('time_person_link')
+    result_two = get_id_columns('person_object_link')
+    assert result_one == {'id': [], 'time_id': [], 'person_id': []}
+    assert result_two == {'id': [], 'person_id': [], 'object_id': []}
 
 
 def test_generate_boilerplate():
