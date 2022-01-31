@@ -1,5 +1,9 @@
+from py import process
 from components.data_vaults.data_vault import generate_boilerplate, \
                                               get_id_columns
+from components.data_vaults.satellites import process_value
+import datetime
+import decimal
 
 
 def test_get_id_columns():
@@ -73,3 +77,14 @@ def test_generate_boilerplate():
         }
     }
     assert boilerplate == expected
+
+
+def test_process_value():
+    val_one = process_value(datetime.datetime(1984, 8, 7))
+    val_two = process_value("Hello     ")
+    val_three = process_value(datetime.time(11, 38, 48))
+    val_four = process_value(decimal.Decimal(12378.12237823727319))
+    assert val_one == '07/08/1984 00:00:00'
+    assert val_two == "Hello"
+    assert val_three == '11:38:48'
+    assert val_four == 12378.122378237273
