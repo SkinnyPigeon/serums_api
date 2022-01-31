@@ -1,4 +1,6 @@
-from components.search.search import hospital_picker
+from components.search.search import hospital_picker, \
+                                     get_serums_id
+from components.connection.create_connection import setup_connection
 
 
 def test_can_pick_hospital():
@@ -14,3 +16,13 @@ def test_can_pick_hospital():
         }
     }
     assert result == expected
+
+
+def test_can_get_serums_id():
+    result = get_serums_id('ustan', 1005549224, 'chi')
+    assert result == 117
+
+
+def test_can_handle_wrong_patient_number():
+    result = get_serums_id('ustan', 912389128398, 'chi')
+    assert result is None

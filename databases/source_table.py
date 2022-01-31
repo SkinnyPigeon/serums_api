@@ -35,7 +35,7 @@ class USTAN_Serums_IDs(Base):
     __table_args__ = {'schema': 'ustan'}
     id = Column(BigInteger, primary_key=True)
     serums_id = Column(Integer, unique=True)
-    chi = Column(BigInteger)
+    chi = Column(BigInteger, unique=True)
 
 
 class USTAN_Hospital_Doctors(Base):
@@ -249,7 +249,7 @@ class USTAN_ML_Serums_IDs(Base):
     __table_args__ = {'schema': 'ustan_ml'}
     id = Column(BigInteger, primary_key=True)
     serums_id = Column(Integer, unique=True)
-    chi = Column(BigInteger)
+    chi = Column(BigInteger, unique=True)
 
 
 class USTAN_ML_Cycles(Base):
@@ -438,7 +438,7 @@ class FCRB_Serums_IDs(Base):
     __table_args__ = {'schema': 'fcrb'}
     id = Column(BigInteger, primary_key=True)
     serums_id = Column(Integer, unique=True)
-    patnr = Column(BigInteger)
+    patnr = Column(BigInteger, unique=True)
 
 
 class FCRB_Hospital_Doctors(Base):
@@ -622,7 +622,7 @@ class ZMC_Serums_IDs(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(BigInteger, primary_key=True)
     serums_id = Column(Integer, unique=True)
-    patnr = Column(BigInteger)
+    patnr = Column(BigInteger, unique=True)
 
 
 class ZMC_Hospital_Doctors(Base):
