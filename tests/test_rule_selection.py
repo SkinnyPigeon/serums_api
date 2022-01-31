@@ -6,7 +6,6 @@ from tests.test_valid_staff_jwt import right_jwt
 import pytest
 
 
-@pytest.mark.skip(reason="This is taking a while, there may be an issue")
 def test_can_get_rules():
     rules = get_rules(right_jwt, 117, 120)
     assert len(rules) > 0
@@ -19,7 +18,6 @@ def test_can_validate_doctor():
     assert validate_doctor(['PATIENT']) is False
 
 
-@pytest.mark.skip(reason="This is taking a while, there may be an issue")
 def test_can_sum_up_rules():
     rules = get_rules(right_jwt, 117, 120)
     tags = sum_up_rules(rules)
@@ -29,7 +27,6 @@ def test_can_sum_up_rules():
     assert 'medication' not in tags
 
 
-@pytest.mark.skip(reason="This is taking a while, there may be an issue")
 def test_can_get_valid_tags():
     tags, rule_ids = get_valid_tags(right_jwt, 117)
     assert len(tags) > 0
