@@ -85,7 +85,7 @@ def select_tabular_patient_data(tag_definition: dict,
     except InvalidRequestError:
         # This is where foreign key lookups are handled for the FCRB use case.
         # It works by using a special value in the tag definition 'key_lookup'.
-        # This is then used to select the patient's native id from a table in 
+        # This is then used to select the patient's native id from a table in
         # which it is found, alongside all the relevant foreign keys in order
         # to join them onto this the table which is missing the patient's id.
 
