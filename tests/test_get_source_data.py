@@ -1,7 +1,8 @@
-from unittest import result
 from components.sphr.get_source_data import tag_picker, \
                                             select_tags, \
-                                            select_tabular_patient_data
+                                            select_tabular_patient_data, \
+                                            parse_sphr
+import json
 
 
 def test_tag_picker():
@@ -55,3 +56,23 @@ def test_can_select_tabular_data():
     assert len(result) > 0
     assert 'chi' in result[0].keys()
     assert 'name' in result[0].keys()
+
+
+def test_can_parse_data():
+    tags = tag_picker('ustan')
+    request_tags = ['patient_details']
+    tag_definitions = select_tags(tags, request_tags)
+    result = select_tabular_patient_data(
+        tag_definitions[0],
+        1005549224,
+        'chi'
+    )
+    example = {}
+    example['ustan'] = {}
+    example['ustan']['data'] = {}
+    example['ustan']['data'][tag_definitions[0]['source']] = result
+    parsed_data = parse_sphr(example)
+    dob = parsed_data['ustan'][tag_definitions[0]['source']][0]['dob']
+    assert dob == '1954-05-10'
+    json_data = json.dumps(parsed_data)
+    assert type(json_data) == str

@@ -3,6 +3,9 @@ from components.utils.class_search import get_class_by_name
 from components.connection.create_connection import setup_connection
 from components.utils.convert_to_dicts import tuples_as_dict
 from sqlalchemy.exc import InvalidRequestError
+from components.utils.convert_dtypes import convert_dates_to_string, \
+                                            convert_decimal_to_float
+import pandas as pd
 
 
 def tag_picker(hospital_id: str):
@@ -111,3 +114,29 @@ def select_tabular_patient_data(tag_definition: dict,
                 data.append(tuples_as_dict(row, fields))
         connection['engine'].dispose()
     return data
+
+
+def parse_sphr(patient_data):
+    """
+    Parses the data of the standard Smart Patient Health Record. \
+    This converts dates to strings and decimals to floats allowing \
+    them to be sent as JSON.
+            Parameters:
+                patient_data (dict): The patient data that has been \
+                                     selected by the API call
+            Returns:
+                result (dict): The parsed data that is ready for \
+                               transmission as JSON
+
+    """
+    result = {}
+    for hospital in patient_data:
+        result[hospital] = {}
+        for table in patient_data[hospital]['data']:
+            df = pd.DataFrame(
+                [x for x in patient_data[hospital]['data'][table]]
+            )
+            df = convert_dates_to_string(df)
+            df = convert_decimal_to_float(df)
+            result[hospital][table] = df.to_dict('index')
+    return result
