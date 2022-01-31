@@ -45,3 +45,18 @@ def test_can_work_with_missing_dates():
     dates = list(result['a'])
     dates = [type(date) == str for date in dates]
     assert all(dates) is True
+
+
+def test_can_convert_decimals_to_floats():
+    result = convert_decimal_to_float(df)
+    floats = list(result['b'])
+    floats = [type(f) == float for f in floats]
+    assert all(floats) is True
+
+
+def test_can_work_with_missing_decimals():
+    df.at[0, 'b'] = NaN
+    result = convert_decimal_to_float(df)
+    floats = list(result['b'])
+    floats = [type(f) == float for f in floats]
+    assert all(floats) is True

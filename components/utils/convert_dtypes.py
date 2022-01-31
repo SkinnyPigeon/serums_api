@@ -34,8 +34,8 @@ def convert_decimal_to_float(df: DataFrame):
     """
     for column in df:
         if df.dtypes[column] in ['object']:
-            # try:
-            df[column] = df[column].astype(float)
-            # except:
-            #     pass
+            try:
+                df[column] = df[column].astype(float)
+            except ValueError:
+                pass
     return df
