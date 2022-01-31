@@ -1,4 +1,4 @@
-from control_files.tags import ustan_tags
+from control_files.tags.ustan import ustan_tags
 
 
 def tag_picker(hospital_id: str):
@@ -18,3 +18,28 @@ def tag_picker(hospital_id: str):
     """
     if hospital_id == 'ustan':
         return ustan_tags
+
+
+def select_tags(tags_list: list, request_tags: list):
+    """
+    Selects the relevant tag definition(s) based on \
+    the valid tags for a request
+        Parameters:
+            tags_list (list): The tag definitions as selected \
+                              by tag_picker()
+            request_tags (list): The list of valid tags which \
+                                 have been requested
+        Returns:
+            selected_tags (list): A list of the tag definitions that \
+                                  is based on the valid tags found \
+                                  in the request body
+    """
+    selected_tags = []
+    for request_tag in request_tags:
+        for tag_definition in tags_list:
+            # try:
+            if tag_definition['tag'] == request_tag:
+                selected_tags.append(tag_definition)
+            # except:
+            #     pass
+    return selected_tags
