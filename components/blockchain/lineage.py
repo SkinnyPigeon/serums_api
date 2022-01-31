@@ -2,6 +2,7 @@ import os
 import jwt
 from datetime import datetime
 import requests
+from hashlib import sha256
 
 BCPASSWORD = os.getenv('BCPASSWORD')
 BC_PATH = os.getenv('BC_PATH')
@@ -41,3 +42,19 @@ def create_record(serums_id: int, rule_id: str, hospital_ids: list):
         return proof_id
     else:
         return False
+
+
+def hash_columns(columns):
+    """
+    Converts the columns that were selected into a hash that can be used \
+    to verify that a rule was executed correctly
+        Parameters:
+            columns (list): The list of columns that was selected \
+                            from the source system
+        Returns:
+            column_hash (str): A hash derived from the stringified ordered list
+    """
+    sorted_columns = sorted(columns)
+    sorted_string = "".join(sorted_columns)
+    column_hash = sha256(sorted_string.encode()).hexdigest()
+    return column_hash
