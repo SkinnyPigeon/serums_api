@@ -27,6 +27,7 @@ def create_record(serums_id: int, rule_id: str, hospital_ids: list):
                             used to continue to update the record
     """
     token = jwt.encode({}, BCPASSWORD, algorithm='HS256')
+    hospital_ids = [id.upper() for id in hospital_ids]
     if isinstance(token, bytes):
         token = token.decode('utf-8')
     header = {"Authorization": f"Bearer {token}"}
