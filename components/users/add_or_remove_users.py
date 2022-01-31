@@ -1,6 +1,7 @@
 from components.connection.create_connection import setup_connection
 from sqlalchemy import insert
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.ext.declarative.api import DeclarativeMeta
 
 
 def select_source_patient_id_name(schema: str):
@@ -29,13 +30,14 @@ def select_source_patient_id_name(schema: str):
                     return str(column).split(".")[1]
 
 
-def get_id_table_class(schema: str, base):
+def get_id_table_class(schema: str, base: DeclarativeMeta):
     """Selects the class object for the id table
 
             Parameters:
                 schema (str): The schema within the database to search through
-                base (Base): The SQLAlchemy Base instance that contains the \
-                             relevant metadata to enable the search
+                base (DeclarativeMeta): The SQLAlchemy Base instance that \
+                                        contains the relevant metadata to \
+                                        enable the search
             Returns:
                 table (obj): A SQLAlchemy Table class object
     """

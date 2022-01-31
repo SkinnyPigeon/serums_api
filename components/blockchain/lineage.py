@@ -8,7 +8,7 @@ BC_PATH = os.getenv('BC_PATH')
 URL = BC_PATH + '/v1/api/proof/'
 
 
-def create_record(serums_id, rule_id, hospital_ids):
+def create_record(serums_id: int, rule_id: str, hospital_ids: list):
     """
     Creates a record on the lineage blockchain that will \
     track the creation of a Smart Patient Health Record

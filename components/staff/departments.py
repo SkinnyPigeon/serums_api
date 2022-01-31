@@ -39,7 +39,7 @@ def get_department_of_staff_member(hospital_id: str, serums_id: int):
         return None
 
 
-def get_departments(hospital_id):
+def get_departments(hospital_id: str):
     """Returns the details about all of the staff members for a \
        healthcare provider.
 
