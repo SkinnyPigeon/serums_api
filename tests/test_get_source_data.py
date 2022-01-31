@@ -1,5 +1,7 @@
+from unittest import result
 from components.sphr.get_source_data import tag_picker, \
-                                            select_tags
+                                            select_tags, \
+                                            select_tabular_patient_data
 
 
 def test_tag_picker():
@@ -39,3 +41,17 @@ def test_tag_selection_can_handle_wrong_tags():
     results = select_tags(tags, wrong_tags)
     assert len(results) == 1
     assert type(results[0]) == dict
+
+
+def test_can_select_tabular_data():
+    tags = tag_picker('ustan')
+    request_tags = ['patient_details']
+    tag_definitions = select_tags(tags, request_tags)
+    result = select_tabular_patient_data(
+        tag_definitions[0],
+        1005549224,
+        'chi'
+    )
+    assert len(result) > 0
+    assert 'chi' in result[0].keys()
+    assert 'name' in result[0].keys()

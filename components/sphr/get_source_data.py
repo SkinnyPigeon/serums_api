@@ -67,7 +67,10 @@ def select_tabular_patient_data(tag_definition: dict,
     data = []
     hospital_id = tag_definition['source'].split('.')[0]
     connection = setup_connection(hospital_id)
-    table_class = get_class_by_name(tag_definition['source'])
+    table_class = get_class_by_name(
+        tag_definition['source'],
+        connection['base']
+    )
     fields = tag_definition['fields']
     entities = []
     for field in fields:
@@ -78,7 +81,7 @@ def select_tabular_patient_data(tag_definition: dict,
                 filter_by(**{key_name: patient_id}).all()
         for row in result:
             data.append(tuples_as_dict(row, fields))
-            connection['engine'].dispose()
+        connection['engine'].dispose()
     except InvalidRequestError as i:
         # This is where foreign key lookups are handled for the FCRB use case
         foreign_key_table_class = get_class_by_name(
