@@ -82,8 +82,18 @@ def select_tabular_patient_data(tag_definition: dict,
         for row in result:
             data.append(tuples_as_dict(row, fields))
         connection['engine'].dispose()
-    except InvalidRequestError as i:
-        # This is where foreign key lookups are handled for the FCRB use case
+    except InvalidRequestError:
+        # This is where foreign key lookups are handled for the FCRB use case.
+        # It works by using a special value in the tag definition 'key_lookup'.
+        # This is then used to select the patient's native id from a table in 
+        # which it is found, alongside all the relevant foreign keys in order
+        # to join them onto this the table which is missing the patient's id.
+
+        # For instance, there is a staff table which does not have a patient id
+        # in it. However, there is another table which has the id of the doctor
+        # who treated the patient. We use the patient's id in this table to get
+        # the ids of the doctors who treated them and then use those as keys to
+        # the table we were originally querying
         foreign_key_table_class = get_class_by_name(
             tag_definition['key_lookup']['table']
         )
