@@ -35,8 +35,7 @@ def create_record(serums_id: int, rule_id: str, hospital_ids: list):
         'hospitalIds': hospital_ids,
         'date': datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     }
-    response = requests.post(URL, data=body, headers=header)
-    print(response.json())
+    response = requests.post(URL, json=body, headers=header)
     if response.status_code == 200:
         proof_id = response.json()['proofId']
         return proof_id
