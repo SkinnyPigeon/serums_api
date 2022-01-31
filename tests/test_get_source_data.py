@@ -1,7 +1,10 @@
 from components.sphr.get_source_data import tag_picker, \
                                             select_tags, \
                                             select_tabular_patient_data, \
-                                            parse_sphr
+                                            parse_sphr, \
+                                            setup_for_query
+from tests.test_jwt_validation import JWT
+from tests.test_valid_staff_jwt import right_jwt as staff_jwt
 import json
 
 
@@ -76,3 +79,26 @@ def test_can_parse_data():
     assert dob == '1954-05-10'
     json_data = json.dumps(parsed_data)
     assert type(json_data) == str
+
+
+def test_setup_for_query():
+    tags = ['patient_details', 'medication']
+    hospital_ids = ['ustan']
+    proof_id, valid_tags, rule_ids = setup_for_query(
+        JWT,
+        tags,
+        117,
+        hospital_ids
+    )
+    assert proof_id[:6] == 'PROOF_'
+    assert valid_tags == tags
+    assert rule_ids == 'PATIENT-ACCESSING-OWN-RECORD'
+    tags.append('secret_data')
+    proof_id, valid_tags, rule_ids = setup_for_query(
+        staff_jwt,
+        tags,
+        117,
+        hospital_ids
+    )
+    assert proof_id[:6] == 'PROOF_'
+    assert valid_tags == ['patient_details']

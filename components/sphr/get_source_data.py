@@ -5,6 +5,11 @@ from components.utils.convert_to_dicts import tuples_as_dict
 from sqlalchemy.exc import InvalidRequestError
 from components.utils.convert_dtypes import convert_dates_to_string, \
                                             convert_decimal_to_float
+from components.jwt.validate import validate_jwt
+from components.blockchain.rules import get_valid_tags
+from components.blockchain.lineage import create_record
+from components.utils.select_source_id import select_source_patient_id_name, \
+                                              select_source_patient_id_value
 import pandas as pd
 
 
@@ -116,7 +121,7 @@ def select_tabular_patient_data(tag_definition: dict,
     return data
 
 
-def parse_sphr(patient_data):
+def parse_sphr(patient_data: dict):
     """
     Parses the data of the standard Smart Patient Health Record. \
     This converts dates to strings and decimals to floats allowing \
@@ -140,3 +145,75 @@ def parse_sphr(patient_data):
             df = convert_decimal_to_float(df)
             result[hospital][table] = df.to_dict('index')
     return result
+
+
+def setup_for_query(jwt: str, tags: list, serums_id: int, hospital_ids: list):
+    jwt_response = validate_jwt(jwt)
+    proof_id = None
+    if 'PATIENT' in jwt_response['user_type']:
+        valid_tags = tags
+        rule_ids = 'PATIENT-ACCESSING-OWN-RECORD'
+    else:
+        valid_tags, rule_ids = get_valid_tags(jwt, serums_id)
+        valid_tags = list(set(valid_tags).intersection(tags))
+    if valid_tags is not None:
+        proof_id = create_record(serums_id, rule_ids, hospital_ids)
+    return proof_id, valid_tags
+
+
+def get_patient_data(serums_id: int, hospital_ids: list, tags: list, jwt: str):
+    """
+    The main function for generating the Smart Patient Health Record
+        Parameters:
+            serums_id (str): The serums_id of the patient whose data is being \
+                             requested
+            hospital_ids (list): A list of hospital_ids from which to search \
+                                 for patient data in
+            tags (list): A list of tags that will be used to select a subset \
+                         of data with
+            jwt (str): The JavaScript Web Token that is used to verify the \
+                       identity of the system user
+        Returns:
+            smart_patient_health_record (dict): A dictionary containing \
+                                                the selected patient data
+    """
+    results = {}
+    proof_id, valid_tags = setup_for_query(jwt,
+                                           tags,
+                                           serums_id,
+                                           hospital_ids)
+    if valid_tags is not None:
+        for hospital_id in hospital_ids:
+            results[hospital_id.upper()] = {}
+            results[hospital_id.upper()]['data'] = {}
+            try:
+                tags_list = tag_picker(hospital_id)
+            except TypeError:
+                continue
+            tags = select_tags(tags_list, valid_tags)
+            connection = setup_connection(hospital_id.lower())
+            key_name = select_source_patient_id_name(hospital_id.lower())
+            try:
+                patient_id = select_source_patient_id_value(
+                    hospital_id.lower(),
+                    serums_id,
+                    key_name
+                )
+            except NoResultFound:
+                continue
+            data = select_patient_data(
+                connection,
+                tags,
+                patient_id,
+                key_name,
+                proof_id
+            )
+            connection['engine'].dispose()
+            if len(data) > 0:
+                results[hospital_id.upper()]['data'] = data
+            elif len(data) <= 0:
+                results[hospital_id.upper()]['data'] = {}
+            results[hospital_id.upper()]['tags'] = tags
+        return results, proof_id
+    else:
+        return False, None

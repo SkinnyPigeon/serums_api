@@ -135,6 +135,6 @@ def get_valid_tags(jwt: str, patient_serums_id: int):
             rules = get_rules(jwt, patient_serums_id, id)
             all_rules.extend(rules)
         tags = sum_up_rules(all_rules)
-    if len(rules) > 0:
+    if len(all_rules) > 0:
         rule_ids = [rule['id'] for rule in all_rules]
     return tags, rule_ids
