@@ -1,10 +1,10 @@
 from py import process
 from components.data_vaults.data_vault import generate_boilerplate, \
-                                              get_id_columns
+                                              get_id_columns, \
+                                              create_data_vault
 from components.data_vaults.satellites import process_value, \
                                               process_satellites
-from components.sphr.get_source_data import get_patient_data, \
-                                            parse_sphr
+from components.sphr.get_source_data import get_patient_data
 from tests.test_valid_staff_jwt import right_jwt as staff_jwt
 import datetime
 import decimal
@@ -98,7 +98,7 @@ def test_process_satellites():
     data, _ = get_patient_data(
         117,
         ['ustan'],
-        ['patient_details', 'medication', 'wearble'],
+        ['patient_details', 'medication', 'wearable'],
         staff_jwt
     )
     result = process_satellites(data)
@@ -187,4 +187,132 @@ def test_process_satellites():
         }
     }
     assert type(result) == dict
+    assert result == expected
+
+
+def test_can_create_data_vault():
+    data, _ = get_patient_data(
+        117,
+        ['ustan'],
+        ['patient_details', 'medication', 'wearable'],
+        staff_jwt
+    )
+    sats = process_satellites(data)
+    result = create_data_vault(sats)
+    expected = {
+        'satellites': {
+            'ustan_sat_time_general_details': [
+                {
+                    'first_seen_date': '18/04/2017 00:00:00',
+                    'dat_death': None,
+                    'hub_time_id': 1
+                }
+            ],
+            'ustan_sat_person_general_patient': [
+                {
+                    'name': 'HERMIONE KOCZUR',
+                    'date_of_birth':
+                    '10/05/1954 00:00:00',
+                    'dob': '10/05/1954 00:00:00',
+                    'gender': 2,
+                    'religion': 0,
+                    'civil_st': 9,
+                    'postcode': 'KY953HY',
+                    'hub_person_id': 1
+                }
+            ],
+            'ustan_sat_person_general_gp': [
+                {
+                    'hub_person_id': 1
+                }
+            ],
+            'ustan_sat_location_general_details': [
+                {
+                    'ref_hospital': 617,
+                    'hub_location_id': 1
+                }
+            ],
+            'ustan_sat_event_general_details': [
+                {
+                    'smid': None,
+                    'smid1': None,
+                    'death_flag': 0,
+                    'hub_event_id': 1
+                }
+            ]
+        },
+        'hubs': {
+            'hub_time': {
+                'id': [1],
+                'chi': [1005549224]
+            },
+            'hub_person': {
+                'id': [1, 1],
+                'chi': [1005549224, 1005549224]
+            },
+            'hub_object': {
+                'id': []
+            },
+            'hub_location': {
+                'id': [1],
+                'chi': [1005549224]
+            },
+            'hub_event': {
+                'id': [1],
+                'chi': [1005549224]
+            }
+        },
+        'links': {
+            'time_person_link': {
+                'id': [],
+                'time_id': [1],
+                'person_id': [1]
+            },
+            'time_object_link': {
+                'id': [],
+                'time_id': [],
+                'object_id': []
+            },
+            'time_location_link': {
+                'id': [],
+                'time_id': [1],
+                'location_id': [1]
+            },
+            'time_event_link': {
+                'id': [],
+                'time_id': [1],
+                'event_id': [1]
+            },
+            'person_object_link': {
+                'id': [],
+                'person_id': [],
+                'object_id': []
+            },
+            'person_location_link': {
+                'id': [],
+                'person_id': [1],
+                'location_id': [1]
+            },
+            'person_event_link': {
+                'id': [],
+                'person_id': [1],
+                'event_id': [1]
+            },
+            'object_location_link': {
+                'id': [],
+                'object_id': [],
+                'location_id': []
+            },
+            'object_event_link': {
+                'id': [],
+                'object_id': [],
+                'event_id': []
+            },
+            'location_event_link': {
+                'id': [],
+                'location_id': [1],
+                'event_id': [1]
+            }
+        }
+    }
     assert result == expected
