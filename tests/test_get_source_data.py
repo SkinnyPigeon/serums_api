@@ -2,7 +2,8 @@ from components.sphr.get_source_data import tag_picker, \
                                             select_tags, \
                                             select_tabular_patient_data, \
                                             parse_sphr, \
-                                            setup_for_query
+                                            setup_for_query, \
+                                            get_patient_data
 from tests.test_jwt_validation import JWT
 from tests.test_valid_staff_jwt import right_jwt as staff_jwt
 import json
@@ -84,7 +85,7 @@ def test_can_parse_data():
 def test_setup_for_query():
     tags = ['patient_details', 'medication']
     hospital_ids = ['ustan']
-    proof_id, valid_tags, rule_ids = setup_for_query(
+    proof_id, valid_tags = setup_for_query(
         JWT,
         tags,
         117,
@@ -92,9 +93,8 @@ def test_setup_for_query():
     )
     assert proof_id[:6] == 'PROOF_'
     assert valid_tags == tags
-    assert rule_ids == 'PATIENT-ACCESSING-OWN-RECORD'
     tags.append('secret_data')
-    proof_id, valid_tags, rule_ids = setup_for_query(
+    proof_id, valid_tags = setup_for_query(
         staff_jwt,
         tags,
         117,
@@ -102,3 +102,75 @@ def test_setup_for_query():
     )
     assert proof_id[:6] == 'PROOF_'
     assert valid_tags == ['patient_details']
+
+
+def test_get_patient_data():
+    result, proof_id = get_patient_data(
+        117,
+        ['ustan'],
+        ['patient_details'],
+        JWT
+    )
+    assert proof_id[:6] == 'PROOF_'
+    parsed_result = parse_sphr(result)
+    expected = {
+        'USTAN': {
+            'ustan.general': {
+                0: {
+                    'chi': 1005549224,
+                    'name': 'HERMIONE KOCZUR',
+                    'date_of_birth': '1954-05-10',
+                    'first_seen_date': '2017-04-18',
+                    'smid': 'None',
+                    'smid1': 'None',
+                    'dob': '1954-05-10',
+                    'gender': 2,
+                    'religion': 0,
+                    'civil_st': 9,
+                    'ref_hospital': 617,
+                    'postcode':
+                    'KY953HY',
+                    'death_flag': 0,
+                    'dat_death':
+                    'None'
+                }
+            }
+        }
+    }
+    assert parsed_result == expected
+
+
+def test_doctor_can_only_get_allowed_data():
+    result, proof_id = get_patient_data(
+        117,
+        ['ustan'],
+        ['patient_details', 'medication', 'wearble'],
+        staff_jwt
+    )
+    assert proof_id[:6] == 'PROOF_'
+    parsed_result = parse_sphr(result)
+    expected = {
+        'USTAN': {
+            'ustan.general': {
+                0: {
+                    'chi': 1005549224,
+                    'name': 'HERMIONE KOCZUR',
+                    'date_of_birth': '1954-05-10',
+                    'first_seen_date': '2017-04-18',
+                    'smid': 'None',
+                    'smid1': 'None',
+                    'dob': '1954-05-10',
+                    'gender': 2,
+                    'religion': 0,
+                    'civil_st': 9,
+                    'ref_hospital': 617,
+                    'postcode':
+                    'KY953HY',
+                    'death_flag': 0,
+                    'dat_death':
+                    'None'
+                }
+            }
+        }
+    }
+    assert parsed_result == expected
