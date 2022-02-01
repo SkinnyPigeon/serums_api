@@ -77,7 +77,6 @@ def get_patient_data_for_ml(serums_id: int):
             return {"message": "Patient not found with that Serums ID"}, 500
         for table in tables:
             table_class = connection['base'].classes[table]
-            print(type(table_class))
             data = select_patient_data(
                 table_class,
                 patient_id,
