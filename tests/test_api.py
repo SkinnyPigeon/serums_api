@@ -19,6 +19,16 @@ admin_jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
             "dWsvIn0.JAYsr1P5EBO04C7BggojLS8Kvc0en"\
             "eg0H2PrHtvmrqs"
 
+public_key = "-----BEGIN PUBLIC KEY-----\n"\
+             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB"\
+             "iQKBgQCLCWYFVX0YmP4Hezn7fOdTFiuO\n"\
+             "41c8ZLLpN0jCAZjLPCi6ZFN1nhaXn9Hu"\
+             "CJFIYimPDC04u1VJclD5GfVE6zuDRUcq\n"\
+             "tVDQP/Qw88WKpDY4e2zjIddIC0Qs9uE1"\
+             "ErX7ae+yQE8vXf0OTrBZQRyCH7DtM4/e\n"\
+             "pAJ84ck6ySK3CIwF0QIDAQAB\n"\
+             "-----END PUBLIC KEY-----"
+
 URL = 'http://localhost:8000/'
 
 admin_header = {
@@ -290,13 +300,122 @@ def test_get_sphr():
     assert len(authorized_data['USTAN'].keys()) > 1
 
 
-# def test_get_encrypted_sphr():
-#     pass
+def test_get_encrypted_sphr():
+    body = {
+        "serums_id": 117,
+        "tags": [
+            "patient_details",
+            "chemotherapy"
+        ],
+        "hospital_ids": [
+            "USTAN"
+        ],
+        "public_key": public_key
+
+    }
+    unauthorized_body = body.copy()
+    unauthorized_body['serums_id'] = 118
+    unauthorized_res = requests.post(URL +
+                                     'smart_patient_health_record/encrypted',
+                                     headers=patient_header,
+                                     json=unauthorized_body)
+    no_header_res = requests.post(URL +
+                                  'smart_patient_health_record/encrypted',
+                                  json=body)
+    authorized_res = requests.post(URL +
+                                   'smart_patient_health_record/encrypted',
+                                   headers=patient_header,
+                                   json=body)
+    staff_res = requests.post(URL + 'smart_patient_health_record/encrypted',
+                              headers=staff_header,
+                              json=body)
+    assert unauthorized_res.status_code == 401
+    assert dict(unauthorized_res.json())['message'] == \
+        "Patients can only access their own records, "\
+        "please check the serums id in request body"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert staff_res.status_code == 200
+    assert staff_res.json() != authorized_res.json()
+    assert list(dict(authorized_res.json()).keys()) == ['data', 'key']
 
 
-# def test_get_data_vault():
-#     pass
+def test_get_data_vault():
+    body = {
+        "serums_id": 117,
+        "tags": [
+            "patient_details",
+            "chemotherapy"
+        ],
+        "hospital_ids": [
+            "USTAN"
+        ]
+    }
+    unauthorized_body = body.copy()
+    unauthorized_body['serums_id'] = 118
+    unauthorized_res = requests.post(URL + 'data_vault/data_vault',
+                                     headers=patient_header,
+                                     json=unauthorized_body)
+    no_header_res = requests.post(URL + 'data_vault/data_vault',
+                                  json=body)
+    authorized_res = requests.post(URL + 'data_vault/data_vault',
+                                   headers=patient_header,
+                                   json=body)
+    staff_res = requests.post(URL + 'data_vault/data_vault',
+                              headers=staff_header,
+                              json=body)
+    assert unauthorized_res.status_code == 401
+    assert dict(unauthorized_res.json())['message'] == \
+        "Patients can only access their own records, "\
+        "please check the serums id in request body"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert staff_res.status_code == 200
+    assert staff_res.json() != authorized_res.json()
+    staff_data = dict(staff_res.json())
+    assert list(staff_data.keys()) == ['satellites', 'hubs', 'links']
+    authorized_data = dict(authorized_res.json())
+    assert len(authorized_data['satellites'].keys()) > 0
 
 
-# def test_get_encrypted_data_vault():
-#     pass
+def test_get_encrypted_data_vault():
+    body = {
+        "serums_id": 117,
+        "tags": [
+            "patient_details",
+            "chemotherapy"
+        ],
+        "hospital_ids": [
+            "USTAN"
+        ],
+        "public_key": public_key
+
+    }
+    unauthorized_body = body.copy()
+    unauthorized_body['serums_id'] = 118
+    unauthorized_res = requests.post(URL + 'data_vault/encrypted',
+                                     headers=patient_header,
+                                     json=unauthorized_body)
+    no_header_res = requests.post(URL + 'data_vault/encrypted',
+                                  json=body)
+    authorized_res = requests.post(URL + 'data_vault/encrypted',
+                                   headers=patient_header,
+                                   json=body)
+    staff_res = requests.post(URL + 'data_vault/encrypted',
+                              headers=staff_header,
+                              json=body)
+    assert unauthorized_res.status_code == 401
+    assert dict(unauthorized_res.json())['message'] == \
+        "Patients can only access their own records, "\
+        "please check the serums id in request body"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert staff_res.status_code == 200
+    assert staff_res.json() != authorized_res.json()
+    assert list(dict(authorized_res.json()).keys()) == ['data', 'key']
