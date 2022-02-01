@@ -38,3 +38,28 @@ def test_get_department_of_staff_member():
     assert sorted(dict(res.json()).keys()) == sorted(expected)
     bad_res = requests.get(URL + 'staff_tables/get_department_of_staff_member')
     assert bad_res.status_code == 403
+
+
+def test_get_single_hospital_tags():
+    body = {
+        'hospital_id': 'USTAN'
+    }
+    res = requests.post(URL + 'tags_tables/tags', json=body)
+    assert res.status_code == 200
+    expected_keys = ['tags', 'translated']
+    assert sorted(dict(res.json()).keys()) == sorted(expected_keys)
+    assert len(dict(res.json())['tags']) > 0
+
+
+def test_get_multi_hospital_tags():
+    body = {
+        'hospital_ids': [
+            'USTAN',
+            'FCRB',
+            'ZMC'
+        ]
+    }
+    res = requests.post(URL + 'tags_tables/all_tags', json=body)
+    assert res.status_code == 200
+    expected_keys = ['FCRB', 'USTAN', 'ZMC']
+    assert sorted(dict(res.json()).keys()) == sorted(expected_keys)

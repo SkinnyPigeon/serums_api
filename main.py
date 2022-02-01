@@ -3,9 +3,14 @@ from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
                                   FullDepartmentRequest, \
                                   FullDepartmentResponse, \
-                                  StaffMemberDepartmentResponse
+                                  StaffMemberDepartmentResponse, \
+                                  SingleHospitalTagsRequest, \
+                                  SingleHospitalTagsResponse, \
+                                  MultiHospitalTagsRequest, \
+                                  MultiHospitalTagsResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
+from components.tags.tags import get_tags
 from components.jwt.validate import validate_jwt
 
 
@@ -107,3 +112,21 @@ def request_get_dpt_of_staff_member(Authorization: str = Header(None)):
         jwt_response['serums_id']
     )
     return response
+
+
+@app.post('/tags_tables/tags',
+          tags=['TAGS'],
+          response_model=SingleHospitalTagsResponse)
+def request_get_single_hospital_tags(body: SingleHospitalTagsRequest):
+    tags = get_tags(body.hospital_id)
+    return tags
+
+
+@app.post('/tags_tables/all_tags',
+          tags=['TAGS'],
+          response_model=MultiHospitalTagsResponse)
+def request_get_multi_hospital_tags(body: MultiHospitalTagsRequest):
+    tags = {}
+    for hospital_id in body.hospital_ids:
+        tags[hospital_id] = get_tags(hospital_id)
+    return tags
