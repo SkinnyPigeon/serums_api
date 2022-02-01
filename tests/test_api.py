@@ -20,6 +20,18 @@ admin_jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
 
 URL = 'http://localhost:8000/'
 
+admin_header = {
+    'Authorization': 'Bearer ' + admin_jwt
+}
+
+staff_header = {
+    'Authorization': 'Bearer ' + staff_jwt
+}
+
+patient_header = {
+    'Authorization': 'Bearer ' + patient_jwt
+}
+
 
 def test_hello():
     res = requests.get(URL + 'hello/hello')
@@ -82,12 +94,6 @@ def test_get_multi_hospital_tags():
 
 
 def test_add_user():
-    admin_header = {
-        'Authorization': 'Bearer ' + admin_jwt
-    }
-    unauthorized_header = {
-        'Authorization': 'Bearer ' + patient_jwt
-    }
     body = {
         "serums_id": 26538,
         "patient_id": 1923893,
@@ -104,7 +110,7 @@ def test_add_user():
 
     unauthorized_res = requests.post(URL + 'users/add_user',
                                      json=body,
-                                     headers=unauthorized_header)
+                                     headers=patient_header)
     no_header_res = requests.post(URL + 'users/add_user', json=body)
     authorized_res = requests.post(URL + 'users/add_user',
                                    json=body,
@@ -122,12 +128,6 @@ def test_add_user():
 
 
 def test_remove_user():
-    admin_header = {
-        'Authorization': 'Bearer ' + admin_jwt
-    }
-    unauthorized_header = {
-        'Authorization': 'Bearer ' + patient_jwt
-    }
     add_body = {
         "serums_id": 26538,
         "patient_id": 1923893,
@@ -145,7 +145,7 @@ def test_remove_user():
 
     unauthorized_res = requests.post(URL + 'users/remove_user',
                                      json=body,
-                                     headers=unauthorized_header)
+                                     headers=patient_header)
     no_header_res = requests.post(URL + 'users/remove_user', json=body)
     authorized_res = requests.post(URL + 'users/remove_user',
                                    json=body,
@@ -167,3 +167,30 @@ def test_remove_user():
                 "message": "User not found in FCRB"
             }
         }
+
+
+def test_get_ml():
+    unauthorized_res = requests.get(URL + 'machine_learning/analytics',
+                                    headers=admin_header)
+    no_header_res = requests.get(URL + 'machine_learning/analytics')
+    authorized_res = requests.get(URL + 'machine_learning/analytics',
+                                  headers=patient_header)
+    assert unauthorized_res.status_code == 401
+    print(dict(unauthorized_res.json()))
+    assert dict(unauthorized_res.json())['message'] == \
+        "Only patients can access their own ML data"
+    print(no_header_res.json())
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    expected_keys = [
+        'cycles',
+        'general',
+        'intentions',
+        'patients',
+        'regimes',
+        'smr01',
+        'smr06'
+    ]
+    assert sorted(dict(authorized_res.json()).keys()) == sorted(expected_keys)

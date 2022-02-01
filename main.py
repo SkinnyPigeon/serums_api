@@ -1,3 +1,4 @@
+from unittest import result
 from fastapi import FastAPI, Depends, Header, Response, status
 from fastapi.responses import JSONResponse
 import json
@@ -14,17 +15,22 @@ from models.request_fields import HelloResponse, \
     HandleError500, \
     UnauthorizedResponse, \
     AddUserRequest, \
-    AddUserUnauthorizedResponse, \
     AddUserSuccessResponse, \
     RemoveUserRequest, \
     RemoveUserSuccessResponse, \
-    RemoveUserUnauthorizedResponse
+    MLSuccessResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
 from components.users.add_or_remove_users import add_user, remove_user
+from components.ml.data_for_ml import get_patient_data_for_ml
 from components.jwt.validate import validate_jwt
 
+responses = {
+    401: {"model": UnauthorizedResponse},
+    403: {"model": NotAuthenticated},
+    500: {"model": HandleError500}
+}
 
 description = """
 This is an updated version of the Serums Datalake API. \
@@ -147,17 +153,7 @@ def request_get_multi_hospital_tags(body: MultiHospitalTagsRequest):
 @app.post('/users/add_user',
           tags=['USERS'],
           response_model=AddUserSuccessResponse,
-          responses={
-              401: {
-                  "model": UnauthorizedResponse
-              },
-              403: {
-                  "model": NotAuthenticated
-              },
-              500: {
-                  "model": HandleError500
-              }
-          },
+          responses=responses,
           dependencies=[Depends(JWTBearer())])
 def request_add_user(body: AddUserRequest,
                      response: Response,
@@ -186,17 +182,7 @@ def request_add_user(body: AddUserRequest,
 @app.post('/users/remove_user',
           tags=['USERS'],
           response_model=RemoveUserSuccessResponse,
-          responses={
-              401: {
-                  "model": UnauthorizedResponse
-              },
-              403: {
-                  "model": NotAuthenticated
-              },
-              500: {
-                  "model": HandleError500
-              }
-          },
+          responses=responses,
           dependencies=[Depends(JWTBearer())])
 def request_remove_user(body: RemoveUserRequest,
                         response: Response,
@@ -218,4 +204,28 @@ def request_remove_user(body: RemoveUserRequest,
     else:
         return JSONResponse(status_code=401, content={
             "message": "Only admins can remove users"
+        })
+
+
+@app.get('/machine_learning/analytics',
+         tags=['MACHINE LEARNING'],
+         response_model=MLSuccessResponse,
+         responses=responses,
+         dependencies=[Depends(JWTBearer())])
+def get_ml_data(response: Response, Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'PATIENT' in jwt_response['user_type']:
+        results = get_patient_data_for_ml(jwt_response['serums_id'])
+        if results[1] == 200:
+            return results[0]
+        else:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return results[0]
+    else:
+        return JSONResponse(status_code=401, content={
+            "message": "Only patients can access their own ML data"
         })
