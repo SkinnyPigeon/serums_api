@@ -1,6 +1,8 @@
 from fastapi import FastAPI, Depends, Header
 from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
+                                  FullDepartmentRequest, \
+                                  FullDepartmentResponse, \
                                   StaffMemberDepartmentResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
@@ -86,10 +88,12 @@ def say_hello():
     return {"hello": "Welcome to the API. The server is on"}
 
 
-@app.get("/staff_tables/departments", tags=['STAFF'])
-def request_get_departments():
-    # jwt = request
-    pass
+@app.post("/staff_tables/departments",
+          tags=['STAFF'],
+          response_model=FullDepartmentResponse)
+def request_get_departments(body: FullDepartmentRequest):
+    departments = get_departments(body.hospital_id)
+    return departments
 
 
 @app.get("/staff_tables/get_department_of_staff_member",
