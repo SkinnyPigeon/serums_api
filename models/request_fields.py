@@ -308,9 +308,22 @@ class RemoveUserRequest(BaseModel):
     serums_id: int = 26537
     hospital_ids: list = [
         "USTAN",
-        "FCRB"
+        "FCRB",
+        "ZMC"
     ]
 
 
-class RemoveUserResponse(BaseModel):
-    message: str = "User successfully removed from [USTAN, FCRB]"
+class RemoveUserSuccessResponse(BaseModel):
+    ustan: Optional[dict] = {
+        "message": "User successfully removed from USTAN"
+    }
+    fcrb: Optional[dict] = {
+        "message": "User not found in FCRB"
+    }
+    zmc: Optional[dict] = {
+        "message": "User not found in ZMC"
+    }
+
+
+class RemoveUserUnauthorizedResponse(BaseModel):
+    message: str = "Only admins can remove users"

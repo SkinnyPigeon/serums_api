@@ -4,7 +4,9 @@ from components.users.add_or_remove_users import remove_user, \
 
 def test_cannot_remove_unregistered_user():
     result = remove_user(2000, ['ustan'])
-    assert result[1] == 500
+    assert result[0]['ustan'] == {
+        "message": "User not found in USTAN"
+    }
 
 
 def test_can_add_new_user():

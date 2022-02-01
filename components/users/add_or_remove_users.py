@@ -65,6 +65,7 @@ def remove_user(serums_id: int, hospital_ids: list):
                                 the action was successful plus a response \
                                 status code e.g. 200
     """
+    response = {}
     for hospital_id in hospital_ids:
         schema = hospital_id.lower()
         connection = setup_connection(schema)
@@ -77,14 +78,21 @@ def remove_user(serums_id: int, hospital_ids: list):
             deleted_user = res.rowcount
             connection['engine'].dispose()
             if deleted_user == 0:
-                return {"message": f"User not found in {hospital_id}"}, 500
+                response[hospital_id.lower()] = {
+                    "message": f"User not found in {hospital_id.upper()}"
+                }
+            if deleted_user == 1:
+                response[hospital_id.lower()] = {
+                    "message": f"User successfully removed from "
+                               f"{hospital_id.upper()}"
+                }
         except Exception as e:
             connection['engine'].dispose()
             return {
                 "message": f"Error removing user from {hospital_id}",
                 "error": str(e)
             }, 500
-    return {"message": f"User successfully removed from {hospital_ids}"}, 200
+    return response, 200
 
 
 def add_user(serums_id: int, patient_id: int, hospital_id: str):
