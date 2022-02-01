@@ -21,7 +21,8 @@ from models.request_fields import HelloResponse, \
     SearchResponse, \
     SPHRRequest, \
     SPHRRequestEncrypted, \
-    SPHRResponseEncrypted
+    SPHRResponseEncrypted, \
+    DVResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
@@ -31,6 +32,10 @@ from components.search.search import search_for_serums_id
 from components.sphr.get_source_data import get_patient_data, parse_sphr
 from components.encryption.encryption import encrypt_data_with_new_key, \
                                              encrypt_key
+from components.data_vaults.data_vault import create_data_vault
+from components.data_vaults.satellites import process_satellites
+from components.data_vaults.hub_post_processing import hub_equalizer
+from components.data_vaults.link_post_processing import add_id_values
 from components.jwt.validate import validate_jwt
 
 responses = {
@@ -328,6 +333,79 @@ def get_the_encrypted_sphr(body: SPHRRequestEncrypted,
         parsed_data = parse_sphr(patient_data)
         encrypted_data, encryption_key, public_key = \
             encrypt_data_with_new_key(parsed_data, body.public_key)
+        encrypted_key = encrypt_key(encryption_key, public_key)
+        return {"data": encrypted_data, "key": encrypted_key}
+    return JSONResponse(status_code=500, content={
+            "message": "Unable to create SPHR"
+        })
+
+
+@app.post('/data_vault/data_vault',
+          response_model=DVResponse,
+          responses=responses,
+          tags=['DATA VAULT'],
+          dependencies=[Depends(JWTBearer())])
+def get_the_unencrypted_data_vault(body: SPHRRequest,
+                                   Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'PATIENT' in jwt_response['user_type'] and \
+            body.serums_id != jwt_response['serums_id']:
+        return JSONResponse(status_code=401, content={
+            "message": "Patients can only access their own records, "
+                       "please check the serums id in request body"
+        })
+    patient_data, proof_id = get_patient_data(
+        jwt_response['serums_id'],
+        body.hospital_ids,
+        body.tags,
+        Authorization
+    )
+    if patient_data:
+        satellites = process_satellites(patient_data)
+        data_vault = create_data_vault(satellites)
+        add_id_values(data_vault['links'])
+        hub_equalizer(data_vault['hubs'])
+        return data_vault
+    return JSONResponse(status_code=500, content={
+            "message": "Unable to create SPHR"
+        })
+
+
+@app.post('/data_vault/encrypted',
+          response_model=SPHRResponseEncrypted,
+          responses=responses,
+          tags=['DATA VAULT'],
+          dependencies=[Depends(JWTBearer())])
+def get_the_encrypted_data_vault(body: SPHRRequestEncrypted,
+                                 Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'PATIENT' in jwt_response['user_type'] and \
+            body.serums_id != jwt_response['serums_id']:
+        return JSONResponse(status_code=401, content={
+            "message": "Patients can only access their own records, "
+                       "please check the serums id in request body"
+        })
+    patient_data, proof_id = get_patient_data(
+        jwt_response['serums_id'],
+        body.hospital_ids,
+        body.tags,
+        Authorization
+    )
+    if patient_data:
+        satellites = process_satellites(patient_data)
+        data_vault = create_data_vault(satellites)
+        add_id_values(data_vault['links'])
+        hub_equalizer(data_vault['hubs'])
+        encrypted_data, encryption_key, public_key = \
+            encrypt_data_with_new_key(data_vault, body.public_key)
         encrypted_key = encrypt_key(encryption_key, public_key)
         return {"data": encrypted_data, "key": encrypted_key}
     return JSONResponse(status_code=500, content={
