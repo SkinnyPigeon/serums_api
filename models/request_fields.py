@@ -1,7 +1,14 @@
+"""
+These are the models for the requests and responses via the api.
+They use Pydantic to do some type checking and enforcing.
+"""
+
 from typing import Any, Optional
 from pydantic import BaseModel
 from datetime import datetime
 import json
+
+from components.encryption.encryption import encrypt_key
 
 
 class HelloResponse(BaseModel):
@@ -1345,4 +1352,787 @@ class SearchResponse(BaseModel):
                     "serums_id": 117
                 }
             ]
+        }
+
+
+class SPHRRequest(BaseModel):
+    serums_id: int
+    tags: list
+    hospital_ids: list
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "serums_id": 117,
+                "tags": [
+                    "patient_details",
+                    "chemotherapy"
+                ],
+                "hospital_ids": [
+                    "USTAN"
+                ]
+            }
+        }
+
+
+public_key = "-----BEGIN PUBLIC KEY-----\n"\
+             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQK"\
+             "BgQCDM+DNCybR7LdizOcK1gH2P7dD\nsajG"\
+             "UEIoPFp7wjhgKykYkCGVQCvl55g/zdh6UI9"\
+             "Cd/i2IEf5wo+Ct9oihy9SnJSp\n3sOp1KES"\
+             "V+ElwdK3vkaIo1AUuj+E8LTe7llyJ61JJdZ"\
+             "aozyT0PxM8jB2vIaNEdbO\nbURHcIsIDc64"\
+             "L0e1ZQIDAQAB\n-----END PUBLIC KEY-----"
+
+
+class SPHRRequestEncrypted(BaseModel):
+    serums_id: int
+    tags: list
+    hospital_ids: list
+    public_key: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "serums_id": 117,
+                "tags": [
+                    "patient_details"
+                ],
+                "hospital_ids": [
+                    "USTAN"
+                ],
+                "public_key": public_key
+            }
+        }
+
+
+sphr_response = json.loads('''
+    {
+        "USTAN": {
+            "ustan.general": {
+            "0": {
+                "chi": 1005549224,
+                "name": "HERMIONE KOCZUR",
+                "date_of_birth": "1954-05-10",
+                "first_seen_date": "2017-04-18",
+                "smid": "None",
+                "smid1": "None",
+                "dob": "1954-05-10",
+                "gender": 2,
+                "religion": 0,
+                "civil_st": 9,
+                "ref_hospital": 617,
+                "postcode": "KY953HY",
+                "death_flag": 0,
+                "dat_death": "None"
+            }
+            },
+            "ustan.cycles": {
+            "0": {
+                "chi": 1005549224,
+                "regime_id": 1,
+                "intention_id": 1,
+                "cycle_id": 1,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-09-13",
+                "elapsed_days": 0,
+                "interval_days": 20,
+                "appointment_date": "2018-09-13",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX WKLY",
+                "cycle": 1,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 3,
+                "vomiting": 0,
+                "diarrhoea": 2,
+                "constipation": 1,
+                "oralMucositis": 0,
+                "oesophagitis": 4,
+                "neurotoxicity": 4,
+                "handFoot": 3,
+                "skin": 3,
+                "hypersensitivity": 4,
+                "fatigue": 5,
+                "required_doses": 3649.93547
+            },
+            "1": {
+                "chi": 1005549224,
+                "regime_id": 130,
+                "intention_id": 88,
+                "cycle_id": 1124,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-03-22",
+                "elapsed_days": 84,
+                "interval_days": 20,
+                "appointment_date": "2018-06-14",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D NEO (FEC)",
+                "cycle": 5,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 1,
+                "vomiting": 4,
+                "diarrhoea": 4,
+                "constipation": 6,
+                "oralMucositis": 0,
+                "oesophagitis": 1,
+                "neurotoxicity": 5,
+                "handFoot": 3,
+                "skin": 2,
+                "hypersensitivity": 5,
+                "fatigue": 5,
+                "required_doses": 1685.106444
+            },
+            "2": {
+                "chi": 1005549224,
+                "regime_id": 884,
+                "intention_id": 523,
+                "cycle_id": 7336,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-05-30",
+                "elapsed_days": 21,
+                "interval_days": 20,
+                "appointment_date": "2020-06-20",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (FEC)",
+                "cycle": 2,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 1,
+                "vomiting": 0,
+                "diarrhoea": 3,
+                "constipation": 2,
+                "oralMucositis": 1,
+                "oesophagitis": 5,
+                "neurotoxicity": 5,
+                "handFoot": 5,
+                "skin": 1,
+                "hypersensitivity": 4,
+                "fatigue": 5,
+                "required_doses": 1893.169694
+            },
+            "3": {
+                "chi": 1005549224,
+                "regime_id": 1644,
+                "intention_id": 982,
+                "cycle_id": 13762,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-06-13",
+                "elapsed_days": 63,
+                "interval_days": 19,
+                "appointment_date": "2020-08-15",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (D)",
+                "cycle": 4,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 1,
+                "vomiting": 0,
+                "diarrhoea": 4,
+                "constipation": 6,
+                "oralMucositis": 1,
+                "oesophagitis": 4,
+                "neurotoxicity": 4,
+                "handFoot": 2,
+                "skin": 1,
+                "hypersensitivity": 5,
+                "fatigue": 3,
+                "required_doses": 2266.419613
+            },
+            "4": {
+                "chi": 1005549224,
+                "regime_id": 1797,
+                "intention_id": 1064,
+                "cycle_id": 15217,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-02-25",
+                "elapsed_days": 189,
+                "interval_days": 18,
+                "appointment_date": "2018-09-02",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D NEO (FEC)",
+                "cycle": 10,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 2,
+                "vomiting": 3,
+                "diarrhoea": 5,
+                "constipation": 3,
+                "oralMucositis": 1,
+                "oesophagitis": 1,
+                "neurotoxicity": 2,
+                "handFoot": 2,
+                "skin": 1,
+                "hypersensitivity": 2,
+                "fatigue": 5,
+                "required_doses": 3925.381275
+            },
+            "5": {
+                "chi": 1005549224,
+                "regime_id": 1834,
+                "intention_id": 1087,
+                "cycle_id": 15490,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-12-09",
+                "elapsed_days": 126,
+                "interval_days": 18,
+                "appointment_date": "2019-04-14",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D NEO (FEC)",
+                "cycle": 7,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 2,
+                "vomiting": 2,
+                "diarrhoea": 2,
+                "constipation": 4,
+                "oralMucositis": 3,
+                "oesophagitis": 6,
+                "neurotoxicity": 5,
+                "handFoot": 2,
+                "skin": 6,
+                "hypersensitivity": 1,
+                "fatigue": 5,
+                "required_doses": 4852.662828
+            },
+            "6": {
+                "chi": 1005549224,
+                "regime_id": 1888,
+                "intention_id": 1110,
+                "cycle_id": 15878,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-01-02",
+                "elapsed_days": 84,
+                "interval_days": 21,
+                "appointment_date": "2020-03-26",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 5,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 1,
+                "vomiting": 2,
+                "diarrhoea": 3,
+                "constipation": 1,
+                "oralMucositis": 1,
+                "oesophagitis": 6,
+                "neurotoxicity": 6,
+                "handFoot": 4,
+                "skin": 2,
+                "hypersensitivity": 4,
+                "fatigue": 5,
+                "required_doses": 4882.554832
+            },
+            "7": {
+                "chi": 1005549224,
+                "regime_id": 1939,
+                "intention_id": 1142,
+                "cycle_id": 16393,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-10-21",
+                "elapsed_days": 105,
+                "interval_days": 15,
+                "appointment_date": "2021-02-03",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 6,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 2,
+                "vomiting": 4,
+                "diarrhoea": 5,
+                "constipation": 3,
+                "oralMucositis": 1,
+                "oesophagitis": 6,
+                "neurotoxicity": 1,
+                "handFoot": 4,
+                "skin": 1,
+                "hypersensitivity": 3,
+                "fatigue": 6,
+                "required_doses": 959.901679
+            },
+            "8": {
+                "chi": 1005549224,
+                "regime_id": 2172,
+                "intention_id": 1294,
+                "cycle_id": 18326,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-11-26",
+                "elapsed_days": 147,
+                "interval_days": 18,
+                "appointment_date": "2019-04-22",
+                "intention": "Neo-Adjuvant",
+                "regime": "VINORELBINE IV 1",
+                "cycle": 8,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 3,
+                "vomiting": 3,
+                "diarrhoea": 5,
+                "constipation": 6,
+                "oralMucositis": 0,
+                "oesophagitis": 3,
+                "neurotoxicity": 1,
+                "handFoot": 6,
+                "skin": 6,
+                "hypersensitivity": 5,
+                "fatigue": 2,
+                "required_doses": 635.512842
+            },
+            "9": {
+                "chi": 1005549224,
+                "regime_id": 2349,
+                "intention_id": 1396,
+                "cycle_id": 19636,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-10-03",
+                "elapsed_days": 0,
+                "interval_days": 16,
+                "appointment_date": "2020-10-03",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D NEO (FEC)",
+                "cycle": 1,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 1,
+                "vomiting": 1,
+                "diarrhoea": 4,
+                "constipation": 6,
+                "oralMucositis": 0,
+                "oesophagitis": 4,
+                "neurotoxicity": 1,
+                "handFoot": 5,
+                "skin": 1,
+                "hypersensitivity": 5,
+                "fatigue": 4,
+                "required_doses": 1339.955771
+            },
+            "10": {
+                "chi": 1005549224,
+                "regime_id": 2457,
+                "intention_id": 1456,
+                "cycle_id": 20702,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2019-06-20",
+                "elapsed_days": 147,
+                "interval_days": 17,
+                "appointment_date": "2019-11-14",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 8,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 0,
+                "vomiting": 0,
+                "diarrhoea": 6,
+                "constipation": 1,
+                "oralMucositis": 1,
+                "oesophagitis": 6,
+                "neurotoxicity": 4,
+                "handFoot": 6,
+                "skin": 3,
+                "hypersensitivity": 1,
+                "fatigue": 6,
+                "required_doses": 1310.123773
+            },
+            "11": {
+                "chi": 1005549224,
+                "regime_id": 2564,
+                "intention_id": 1512,
+                "cycle_id": 21555,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2019-07-14",
+                "elapsed_days": 126,
+                "interval_days": 20,
+                "appointment_date": "2019-11-17",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 7,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 2,
+                "vomiting": 0,
+                "diarrhoea": 3,
+                "constipation": 1,
+                "oralMucositis": 2,
+                "oesophagitis": 3,
+                "neurotoxicity": 4,
+                "handFoot": 5,
+                "skin": 5,
+                "hypersensitivity": 2,
+                "fatigue": 6,
+                "required_doses": 3788.800093
+            },
+            "12": {
+                "chi": 1005549224,
+                "regime_id": 2891,
+                "intention_id": 1710,
+                "cycle_id": 24182,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-08-06",
+                "elapsed_days": 0,
+                "interval_days": 15,
+                "appointment_date": "2020-08-06",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (D)",
+                "cycle": 1,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 2,
+                "vomiting": 3,
+                "diarrhoea": 6,
+                "constipation": 2,
+                "oralMucositis": 3,
+                "oesophagitis": 3,
+                "neurotoxicity": 2,
+                "handFoot": 2,
+                "skin": 5,
+                "hypersensitivity": 4,
+                "fatigue": 4,
+                "required_doses": 3338.507707
+            },
+            "13": {
+                "chi": 1005549224,
+                "regime_id": 3423,
+                "intention_id": 2032,
+                "cycle_id": 28527,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-12-16",
+                "elapsed_days": 42,
+                "interval_days": 20,
+                "appointment_date": "2021-01-27",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX WKLY",
+                "cycle": 3,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 2,
+                "vomiting": 1,
+                "diarrhoea": 1,
+                "constipation": 6,
+                "oralMucositis": 2,
+                "oesophagitis": 6,
+                "neurotoxicity": 6,
+                "handFoot": 1,
+                "skin": 2,
+                "hypersensitivity": 1,
+                "fatigue": 1,
+                "required_doses": 918.45087
+            },
+            "14": {
+                "chi": 1005549224,
+                "regime_id": 3421,
+                "intention_id": 2030,
+                "cycle_id": 28589,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-06-25",
+                "elapsed_days": 126,
+                "interval_days": 15,
+                "appointment_date": "2020-10-29",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX WKLY",
+                "cycle": 7,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 0,
+                "vomiting": 2,
+                "diarrhoea": 2,
+                "constipation": 3,
+                "oralMucositis": 3,
+                "oesophagitis": 2,
+                "neurotoxicity": 3,
+                "handFoot": 6,
+                "skin": 3,
+                "hypersensitivity": 5,
+                "fatigue": 3,
+                "required_doses": 2004.030147
+            },
+            "15": {
+                "chi": 1005549224,
+                "regime_id": 3647,
+                "intention_id": 2161,
+                "cycle_id": 30524,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-09-11",
+                "elapsed_days": 0,
+                "interval_days": 16,
+                "appointment_date": "2018-09-11",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (FEC)",
+                "cycle": 1,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 0,
+                "vomiting": 1,
+                "diarrhoea": 6,
+                "constipation": 6,
+                "oralMucositis": 3,
+                "oesophagitis": 1,
+                "neurotoxicity": 1,
+                "handFoot": 4,
+                "skin": 1,
+                "hypersensitivity": 2,
+                "fatigue": 1,
+                "required_doses": 2037.483224
+            },
+            "16": {
+                "chi": 1005549224,
+                "regime_id": 4544,
+                "intention_id": 2679,
+                "cycle_id": 38255,
+                "drug_names": "CAPOX",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-08-08",
+                "elapsed_days": 147,
+                "interval_days": 15,
+                "appointment_date": "2019-01-02",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (D)",
+                "cycle": 8,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 0,
+                "vomiting": 0,
+                "diarrhoea": 2,
+                "constipation": 6,
+                "oralMucositis": 0,
+                "oesophagitis": 2,
+                "neurotoxicity": 4,
+                "handFoot": 5,
+                "skin": 2,
+                "hypersensitivity": 4,
+                "fatigue": 4,
+                "required_doses": 4984.528361
+            },
+            "17": {
+                "chi": 1005549224,
+                "regime_id": 4555,
+                "intention_id": 2685,
+                "cycle_id": 38391,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-12-29",
+                "elapsed_days": 147,
+                "interval_days": 15,
+                "appointment_date": "2019-05-25",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX WKLY",
+                "cycle": 8,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 1,
+                "vomiting": 4,
+                "diarrhoea": 2,
+                "constipation": 1,
+                "oralMucositis": 3,
+                "oesophagitis": 1,
+                "neurotoxicity": 2,
+                "handFoot": 6,
+                "skin": 4,
+                "hypersensitivity": 5,
+                "fatigue": 1,
+                "required_doses": 3828.312595
+            },
+            "18": {
+                "chi": 1005549224,
+                "regime_id": 4705,
+                "intention_id": 2766,
+                "cycle_id": 39699,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-11-16",
+                "elapsed_days": 126,
+                "interval_days": 15,
+                "appointment_date": "2021-03-22",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 7,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 0,
+                "vomiting": 1,
+                "diarrhoea": 5,
+                "constipation": 5,
+                "oralMucositis": 0,
+                "oesophagitis": 3,
+                "neurotoxicity": 5,
+                "handFoot": 6,
+                "skin": 6,
+                "hypersensitivity": 6,
+                "fatigue": 3,
+                "required_doses": 1290.775893
+            },
+            "19": {
+                "chi": 1005549224,
+                "regime_id": 4773,
+                "intention_id": 2814,
+                "cycle_id": 40280,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-04-02",
+                "elapsed_days": 210,
+                "interval_days": 20,
+                "appointment_date": "2020-10-29",
+                "intention": "Neo-Adjuvant",
+                "regime": "DOCETAXEL BREAST",
+                "cycle": 11,
+                "p_ps": -1,
+                "ps": 1,
+                "nausea": 3,
+                "vomiting": 4,
+                "diarrhoea": 4,
+                "constipation": 5,
+                "oralMucositis": 0,
+                "oesophagitis": 3,
+                "neurotoxicity": 4,
+                "handFoot": 4,
+                "skin": 4,
+                "hypersensitivity": 1,
+                "fatigue": 2,
+                "required_doses": 4094.76891
+            },
+            "20": {
+                "chi": 1005549224,
+                "regime_id": 4798,
+                "intention_id": 2798,
+                "cycle_id": 40288,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2021-02-13",
+                "elapsed_days": 21,
+                "interval_days": 15,
+                "appointment_date": "2021-03-06",
+                "intention": "Neo-Adjuvant",
+                "regime": "PACLITAX",
+                "cycle": 2,
+                "p_ps": -1,
+                "ps": 2,
+                "nausea": 4,
+                "vomiting": 4,
+                "diarrhoea": 1,
+                "constipation": 1,
+                "oralMucositis": 0,
+                "oesophagitis": 3,
+                "neurotoxicity": 3,
+                "handFoot": 3,
+                "skin": 1,
+                "hypersensitivity": 3,
+                "fatigue": 2,
+                "required_doses": 1560.428292
+            },
+            "21": {
+                "chi": 1005549224,
+                "regime_id": 5092,
+                "intention_id": 3007,
+                "cycle_id": 42778,
+                "drug_names": "BEP 5 DAY MET",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2018-02-19",
+                "elapsed_days": 63,
+                "interval_days": 19,
+                "appointment_date": "2018-04-23",
+                "intention": "Neo-Adjuvant",
+                "regime": "FEC-D (D)",
+                "cycle": 4,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 2,
+                "vomiting": 2,
+                "diarrhoea": 5,
+                "constipation": 2,
+                "oralMucositis": 3,
+                "oesophagitis": 5,
+                "neurotoxicity": 3,
+                "handFoot": 6,
+                "skin": 6,
+                "hypersensitivity": 4,
+                "fatigue": 6,
+                "required_doses": 4536.198734
+            },
+            "22": {
+                "chi": 1005549224,
+                "regime_id": 5084,
+                "intention_id": 3005,
+                "cycle_id": 42903,
+                "drug_names": "CARBO&PACLI WKLY",
+                "diagnosis": "Breast Cancer",
+                "init_appointment_date": "2020-04-12",
+                "elapsed_days": 273,
+                "interval_days": 17,
+                "appointment_date": "2021-01-10",
+                "intention": "Neo-Adjuvant",
+                "regime": "DOCETAXEL BREAST",
+                "cycle": 14,
+                "p_ps": -1,
+                "ps": 3,
+                "nausea": 4,
+                "vomiting": 1,
+                "diarrhoea": 5,
+                "constipation": 4,
+                "oralMucositis": 3,
+                "oesophagitis": 4,
+                "neurotoxicity": 4,
+                "handFoot": 1,
+                "skin": 3,
+                "hypersensitivity": 4,
+                "fatigue": 1,
+                "required_doses": 2137.767392
+            }
+            }
+        }
+    }
+''')
+
+
+class SPHRResponse(BaseModel):
+    __root__: dict
+
+    class Config:
+        schema_extra = {
+            "example": sphr_response
+        }
+
+
+encrypted_data = "gAAAAABh-VOicZjGJpNZcxM3FVa-p46QjoQ5PW2jXMeRA2Yh1cdLOxJpX15"\
+                 "D24o8CjS_pd-61K5r5qmYvq_3g-Mdv9nYSKrlx89c_1j6SC_nNHb7b6wKzk"\
+                 "V29WJ4_X3GfFV3i8bJwBlf2yg3AdyfvCO9rmHglpVuSk3BQDlE8a4KWbvui"\
+                 "HbIX6DDdz4ctj9BsnxZ4RKWQs6ihikGmjHafQrKiHTf8zULyafToR7E7hm8"\
+                 "xVbFKs-0EKKjJBL2N5w1q4Vg0GqqR5O_rkx9GDK5T8cHNbX3tieBXksvcFc"\
+                 "bdTIJxXlh-1CMSMwvUwE5ylAtzIi4vEwNNKQpguawK2Ht1hE7nYmCpR2WwG"\
+                 "pGdmpcGqqNPLCQyjCxq6ymUHkyPCVenRfB9ovUarWE19C6O0c6kcJHOsGvO"\
+                 "MnfHodoSURmY9ZLTiMecDfGpt8xG7OND1XixaL97BU5nGI6IwoFi3LRETeh"\
+                 "qPDmkZrhkAp2DLDfXabuhR-IH9NkfO8Ceamje5Bh3huEutHmRIDs"
+
+encrypted_key = "VZt7LhQ5NwDjPbuEqHLVMtv8BPr4Sgfrj53QFK1l98KrK3PUEvW4IalGgASF"\
+                "XdMhbubztMkCzSI7fGjpMe+fnV2H37q25q9v8Uww1g0WuSfsirbcc9lzkB84"\
+                "wWxx3wvpvbq4RvvgljgH1o5etiSepU4okgcbNvY/Jp+QCvnHpk0="
+
+
+class SPHRResponseEncrypted(BaseModel):
+    data: str
+    key: str
+
+    class Config:
+        schema_extra = {
+            "example": {
+                "data": encrypted_data,
+                "key": encrypted_key
+            }
         }

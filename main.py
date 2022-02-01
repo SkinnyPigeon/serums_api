@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
     FullDepartmentRequest, \
-    FullDepartmentResponse, \
+    FullDepartmentResponse, SPHRResponse, \
     StaffMemberDepartmentResponse, \
     SingleHospitalTagsRequest, \
     SingleHospitalTagsResponse, \
@@ -18,13 +18,19 @@ from models.request_fields import HelloResponse, \
     RemoveUserSuccessResponse, \
     MLSuccessResponse, \
     SearchRequest, \
-    SearchResponse
+    SearchResponse, \
+    SPHRRequest, \
+    SPHRRequestEncrypted, \
+    SPHRResponseEncrypted
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
 from components.users.add_or_remove_users import add_user, remove_user
 from components.ml.data_for_ml import get_patient_data_for_ml
 from components.search.search import search_for_serums_id
+from components.sphr.get_source_data import get_patient_data, parse_sphr
+from components.encryption.encryption import encrypt_data_with_new_key, \
+                                             encrypt_key
 from components.jwt.validate import validate_jwt
 
 responses = {
@@ -259,4 +265,71 @@ def get_search_for_serums_id(body: SearchRequest,
         return JSONResponse(status_code=401, content={
             "message": "Must be either a medical staff or "
                        "admin to search for users"
+        })
+
+
+@app.post('/smart_patient_health_record/get_sphr',
+          response_model=SPHRResponse,
+          responses=responses,
+          tags=['SMART PATIENT HEALTH RECORD'],
+          dependencies=[Depends(JWTBearer())])
+def get_the_unencrypted_sphr(body: SPHRRequest,
+                             Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'PATIENT' in jwt_response['user_type'] and \
+            body.serums_id != jwt_response['serums_id']:
+        return JSONResponse(status_code=401, content={
+            "message": "Patients can only access their own records, "
+                       "please check the serums id in request body"
+        })
+    patient_data, proof_id = get_patient_data(
+        jwt_response['serums_id'],
+        body.hospital_ids,
+        body.tags,
+        Authorization
+    )
+    if patient_data:
+        parsed_data = parse_sphr(patient_data)
+        return parsed_data
+    return JSONResponse(status_code=500, content={
+            "message": "Unable to create SPHR"
+        })
+
+
+@app.post('/smart_patient_health_record/encrypted',
+          response_model=SPHRResponseEncrypted,
+          responses=responses,
+          tags=['SMART PATIENT HEALTH RECORD'],
+          dependencies=[Depends(JWTBearer())])
+def get_the_encrypted_sphr(body: SPHRRequestEncrypted,
+                           Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'PATIENT' in jwt_response['user_type'] and \
+            body.serums_id != jwt_response['serums_id']:
+        return JSONResponse(status_code=401, content={
+            "message": "Patients can only access their own records, "
+                       "please check the serums id in request body"
+        })
+    patient_data, proof_id = get_patient_data(
+        jwt_response['serums_id'],
+        body.hospital_ids,
+        body.tags,
+        Authorization
+    )
+    if patient_data:
+        parsed_data = parse_sphr(patient_data)
+        encrypted_data, encryption_key, public_key = \
+            encrypt_data_with_new_key(parsed_data, body.public_key)
+        encrypted_key = encrypt_key(encryption_key, public_key)
+        return {"data": encrypted_data, "key": encrypted_key}
+    return JSONResponse(status_code=500, content={
+            "message": "Unable to create SPHR"
         })
