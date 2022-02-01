@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+  data_lake:
+    container_name: data_lake
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image:
+      data_lake
+    stdin_open: true
+    tty: true
