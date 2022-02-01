@@ -43,7 +43,7 @@ def get_id_table_class(schema: str, base: DeclarativeMeta):
     """
     for class_name in base._decl_class_registry.values():
         if hasattr(class_name, '__table__') \
-          and class_name.__table__.fullname == f"{schema}.serums_ids":
+          and class_name.__table__.fullname == f"{schema.lower()}.serums_ids":
             return class_name
 
 

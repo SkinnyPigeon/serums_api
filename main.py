@@ -1,16 +1,24 @@
-from fastapi import FastAPI, Depends, Header
+from fastapi import FastAPI, Depends, Header, Response, status
 from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
-                                  FullDepartmentRequest, \
-                                  FullDepartmentResponse, \
-                                  StaffMemberDepartmentResponse, \
-                                  SingleHospitalTagsRequest, \
-                                  SingleHospitalTagsResponse, \
-                                  MultiHospitalTagsRequest, \
-                                  MultiHospitalTagsResponse
+    FullDepartmentRequest, \
+    FullDepartmentResponse, \
+    StaffMemberDepartmentResponse, \
+    SingleHospitalTagsRequest, \
+    SingleHospitalTagsResponse, \
+    MultiHospitalTagsRequest, \
+    MultiHospitalTagsResponse, \
+    NotAuthenticated, \
+    HandleError500, \
+    AddUserRequest, \
+    AddUserUnauthorizedResponse, \
+    AddUserSuccessResponse, \
+    RemoveUserRequest, \
+    RemoveUserResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
+from components.users.add_or_remove_users import add_user, remove_user
 from components.jwt.validate import validate_jwt
 
 
@@ -130,3 +138,40 @@ def request_get_multi_hospital_tags(body: MultiHospitalTagsRequest):
     for hospital_id in body.hospital_ids:
         tags[hospital_id] = get_tags(hospital_id)
     return tags
+
+
+@app.post('/users/add_user',
+          tags=['USERS'],
+          response_model=AddUserSuccessResponse,
+          responses={
+              401: {
+                  "model": AddUserUnauthorizedResponse
+              },
+              403: {
+                  "model": NotAuthenticated
+              },
+              500: {
+                  "model": HandleError500
+              }
+          },
+          dependencies=[Depends(JWTBearer())])
+def request_add_user(body: AddUserRequest,
+                     response: Response,
+                     Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        response.status_code = status.HTTP_403_FORBIDDEN
+        return {"message": "Not authenticated"}
+    if 'SERUMS_ADMIN' in jwt_response['user_type'] \
+            or 'HOSPITAL_ADMIN' in jwt_response['user_type']:
+        result = add_user(body.serums_id,
+                          body.patient_id,
+                          body.hospital_id)
+        if result[1] == 200:
+            return result[0]
+        else:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return result[0]
+    else:
+        response.status_code = status.HTTP_401_UNAUTHORIZED
+        return {"message": "Only admins can add users"}

@@ -2,6 +2,22 @@ import requests
 from tests.test_jwt_validation import JWT as patient_jwt
 from tests.test_valid_staff_jwt import right_jwt as staff_jwt
 
+admin_jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
+            "eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwI"\
+            "joxNjQ2MzAyMTM5LCJqdGkiOiI5NTBkYzEzMj"\
+            "A1MjQ0N2VhOTQ0YzQ5Mzk5N2JhODE0NiIsInV"\
+            "zZXJJRCI6MTIxLCJpc3MiOiJTZXJ1bXNBdXRo"\
+            "ZW50aWNhdGlvbiIsImlhdCI6MTY0MzcxMDEzO"\
+            "Swic3ViIjoiaG9zcGFkbTFAdXN0YW4uY29tIi"\
+            "wiZ3JvdXBJRHMiOlsiSE9TUElUQUxfQURNSU4"\
+            "iXSwib3JnSUQiOiJVU1RBTiIsImRlcHRJRCI6"\
+            "NSwiZGVwdE5hbWUiOiJIT1NQSVRBTF9BRE1JT"\
+            "iIsInN0YWZmSUQiOjEyMSwibmFtZSI6Ik9saX"\
+            "ZlciBXaWxzb24iLCJhdWQiOiJodHRwczovL3N"\
+            "oY3Muc2VydW1zLmNzLnN0LWFuZHJld3MuYWMu"\
+            "dWsvIn0.JAYsr1P5EBO04C7BggojLS8Kvc0en"\
+            "eg0H2PrHtvmrqs"
+
 URL = 'http://localhost:8000/'
 
 

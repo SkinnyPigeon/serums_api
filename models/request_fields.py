@@ -280,3 +280,37 @@ class MultiHospitalTagsResponse(BaseModel):
             }
         }
     }
+
+
+class NotAuthenticated(BaseModel):
+    message: str = "Not authenticated"
+
+
+class AddUserRequest(BaseModel):
+    serums_id: int = 26537
+    patient_id: int = 1923892
+    hospital_id: str = 'USTAN'
+
+
+class HandleError500(BaseModel):
+    message: str
+
+
+class AddUserSuccessResponse(BaseModel):
+    message: str = "User added correctly"
+
+
+class AddUserUnauthorizedResponse(BaseModel):
+    message: str = "Only admins can add users"
+
+
+class RemoveUserRequest(BaseModel):
+    serums_id: int = 26537
+    hospital_ids: list = [
+        "USTAN",
+        "FCRB"
+    ]
+
+
+class RemoveUserResponse(BaseModel):
+    message: str = "User successfully removed from [USTAN, FCRB]"
