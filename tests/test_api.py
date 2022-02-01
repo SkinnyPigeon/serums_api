@@ -88,6 +88,7 @@ def test_get_multi_hospital_tags():
         ]
     }
     res = requests.post(URL + 'tags_tables/all_tags', json=body)
+    print(res.json())
     assert res.status_code == 200
     expected_keys = ['FCRB', 'USTAN', 'ZMC']
     assert sorted(dict(res.json()).keys()) == sorted(expected_keys)
@@ -151,7 +152,6 @@ def test_remove_user():
                                    json=body,
                                    headers=admin_header)
     assert unauthorized_res.status_code == 401
-    print(dict(unauthorized_res.json()))
     assert dict(unauthorized_res.json())['message'] == \
         "Only admins can remove users"
     assert no_header_res.status_code == 403
@@ -176,10 +176,8 @@ def test_get_ml():
     authorized_res = requests.get(URL + 'machine_learning/analytics',
                                   headers=patient_header)
     assert unauthorized_res.status_code == 401
-    print(dict(unauthorized_res.json()))
     assert dict(unauthorized_res.json())['message'] == \
         "Only patients can access their own ML data"
-    print(no_header_res.json())
     assert no_header_res.status_code == 403
     assert dict(no_header_res.json())['detail'] == \
         "Not authenticated"
@@ -194,3 +192,55 @@ def test_get_ml():
         'smr06'
     ]
     assert sorted(dict(authorized_res.json()).keys()) == sorted(expected_keys)
+
+
+def test_search():
+    good_body = {
+        "patient_id": 1005549224,
+        "dob": "1954-05-10",
+        "hospital_id": "ustan"
+    }
+    missing_hospital = {
+        "patient_id": 1005549224,
+        "dob": "1954-05-10",
+    }
+    wrong_details = {
+        "patient_id": 1,
+        "dob": "1954-05-10",
+        "hospital_id": "ustan"
+    }
+
+    unauthorized_res = requests.post(URL + 'search/serums_id',
+                                     headers=patient_header,
+                                     json=good_body)
+    no_header_res = requests.post(URL + 'search/serums_id', json=good_body)
+    authorized_res = requests.post(URL + 'search/serums_id',
+                                   headers=admin_header,
+                                   json=good_body)
+    assert unauthorized_res.status_code == 401
+    assert dict(unauthorized_res.json())['message'] == \
+        "Must be either a medical staff or admin to search for users"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    expected = [
+        {
+            "chi": 1005549224,
+            "name": "HERMIONE KOCZUR",
+            "date_of_birth": "1954-05-10",
+            "gender": 2,
+            "serums_id": 117
+        }
+    ]
+    assert authorized_res.json() == expected
+    missing_hospital_res = requests.post(URL + 'search/serums_id',
+                                         headers=admin_header,
+                                         json=missing_hospital)
+    wrong_details_res = requests.post(URL + 'search/serums_id',
+                                      headers=admin_header,
+                                      json=wrong_details)
+    assert missing_hospital_res.status_code == 422
+    assert wrong_details_res.status_code == 500
+    assert wrong_details_res.json() == \
+        {"message": "Unable to find a patient with those details"}

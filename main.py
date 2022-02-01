@@ -1,7 +1,5 @@
-from unittest import result
 from fastapi import FastAPI, Depends, Header, Response, status
 from fastapi.responses import JSONResponse
-import json
 from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
     FullDepartmentRequest, \
@@ -19,7 +17,8 @@ from models.request_fields import HelloResponse, \
     RemoveUserRequest, \
     RemoveUserSuccessResponse, \
     MLSuccessResponse, \
-    SearchRequest
+    SearchRequest, \
+    SearchResponse
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
@@ -235,6 +234,7 @@ def get_ml_data(response: Response, Authorization: str = Header(None)):
 
 @app.post('/search/serums_id',
           tags=['SEARCH'],
+          response_model=SearchResponse,
           responses=responses,
           dependencies=[Depends(JWTBearer())])
 def get_search_for_serums_id(body: SearchRequest,
@@ -252,8 +252,9 @@ def get_search_for_serums_id(body: SearchRequest,
         if results[1] == 200:
             return results[0]
         else:
-            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
-            return results[0]
+            return JSONResponse(status_code=500, content={
+                "message": "Unable to find a patient with those details"
+            })
     else:
         return JSONResponse(status_code=401, content={
             "message": "Must be either a medical staff or "

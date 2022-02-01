@@ -167,7 +167,7 @@ class MultiHospitalTagsRequest(BaseModel):
 
 
 class MultiHospitalTagsResponse(BaseModel):
-    __root__: list
+    __root__: dict
 
     class Config:
         schema_extra = {
@@ -1328,4 +1328,21 @@ class SearchRequest(BaseModel):
                 "dob": "1954-05-10",
                 "hospital_id": "ustan"
             }
+        }
+
+
+class SearchResponse(BaseModel):
+    __root__: list
+
+    class Config:
+        schema_extra = {
+            "example": [
+                {
+                    "chi": 1005549224,
+                    "name": "HERMIONE KOCZUR",
+                    "date_of_birth": "1954-05-10",
+                    "gender": 2,
+                    "serums_id": 117
+                }
+            ]
         }
