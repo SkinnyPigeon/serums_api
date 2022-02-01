@@ -12,7 +12,7 @@ JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoi'\
       '5rUqrBs31Zm_QQwqCbGRWMK3dlk2gC31xhMU'
 
 
-@pytest.mark.skip(reason="The JWT will be stop working")
+# @pytest.mark.skip(reason="The JWT will be stop working")
 def test_validation_validates_real_token():
     results = validate_jwt(JWT)
     expected_keys = [
@@ -25,7 +25,7 @@ def test_validation_validates_real_token():
     assert results['status_code'] == 200
 
 
-@pytest.mark.skip(reason="The JWT will be stop working")
+# @pytest.mark.skip(reason="The JWT will be stop working")
 def test_validation_catches_malformed_token():
     results = validate_jwt(JWT[2:])
     assert results['status_code'] == 422
