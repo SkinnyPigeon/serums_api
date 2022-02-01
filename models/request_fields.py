@@ -300,6 +300,10 @@ class AddUserSuccessResponse(BaseModel):
     message: str = "User added correctly"
 
 
+class UnauthorizedResponse(BaseModel):
+    message: str
+
+
 class AddUserUnauthorizedResponse(BaseModel):
     message: str = "Only admins can add users"
 
@@ -313,17 +317,21 @@ class RemoveUserRequest(BaseModel):
     ]
 
 
+removed_user = json.loads('''
+    {
+        "ustan": {
+            "message": "User successfully removed from USTAN"
+        },
+        "fcrb": {
+            "message": "User not found in FCRB"
+        }
+    }
+''')
+
+
 class RemoveUserSuccessResponse(BaseModel):
-    ustan: Optional[dict] = {
-        "message": "User successfully removed from USTAN"
-    }
-    fcrb: Optional[dict] = {
-        "message": "User not found in FCRB"
-    }
-    zmc: Optional[dict] = {
-        "message": "User not found in ZMC"
-    }
+    __root__: dict = removed_user
 
 
 class RemoveUserUnauthorizedResponse(BaseModel):
-    message: str = "Only admins can remove users"
+    message: str

@@ -101,6 +101,7 @@ def test_add_user():
     requests.post(URL + 'users/remove_user',
                   json=del_body,
                   headers=admin_header)
+
     unauthorized_res = requests.post(URL + 'users/add_user',
                                      json=body,
                                      headers=unauthorized_header)
@@ -118,3 +119,51 @@ def test_add_user():
     assert authorized_res.status_code == 200
     assert dict(authorized_res.json())['message'] == \
         "User added correctly"
+
+
+def test_remove_user():
+    admin_header = {
+        'Authorization': 'Bearer ' + admin_jwt
+    }
+    unauthorized_header = {
+        'Authorization': 'Bearer ' + patient_jwt
+    }
+    add_body = {
+        "serums_id": 26538,
+        "patient_id": 1923893,
+        "hospital_id": "USTAN"
+    }
+    body = {
+        "serums_id": 26538,
+        "hospital_ids": ["USTAN", "FCRB"]
+    }
+
+    # Add user if necessary
+    requests.post(URL + 'users/add_user',
+                  json=add_body,
+                  headers=admin_header)
+
+    unauthorized_res = requests.post(URL + 'users/remove_user',
+                                     json=body,
+                                     headers=unauthorized_header)
+    no_header_res = requests.post(URL + 'users/remove_user', json=body)
+    authorized_res = requests.post(URL + 'users/remove_user',
+                                   json=body,
+                                   headers=admin_header)
+    assert unauthorized_res.status_code == 401
+    print(dict(unauthorized_res.json()))
+    assert dict(unauthorized_res.json())['message'] == \
+        "Only admins can remove users"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert dict(authorized_res.json()) == \
+        {
+            "ustan": {
+                "message": "User successfully removed from USTAN"
+            },
+            "fcrb": {
+                "message": "User not found in FCRB"
+            }
+        }

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, Header, Response, status
+from fastapi.responses import JSONResponse
 import json
 from auth.auth_handler import JWTBearer
 from models.request_fields import HelloResponse, \
@@ -11,6 +12,7 @@ from models.request_fields import HelloResponse, \
     MultiHospitalTagsResponse, \
     NotAuthenticated, \
     HandleError500, \
+    UnauthorizedResponse, \
     AddUserRequest, \
     AddUserUnauthorizedResponse, \
     AddUserSuccessResponse, \
@@ -147,7 +149,7 @@ def request_get_multi_hospital_tags(body: MultiHospitalTagsRequest):
           response_model=AddUserSuccessResponse,
           responses={
               401: {
-                  "model": AddUserUnauthorizedResponse
+                  "model": UnauthorizedResponse
               },
               403: {
                   "model": NotAuthenticated
@@ -162,8 +164,9 @@ def request_add_user(body: AddUserRequest,
                      Authorization: str = Header(None)):
     jwt_response = validate_jwt(Authorization)
     if jwt_response['status_code'] != 200:
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {"message": "Not authenticated"}
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
     if 'SERUMS_ADMIN' in jwt_response['user_type'] \
             or 'HOSPITAL_ADMIN' in jwt_response['user_type']:
         result = add_user(body.serums_id,
@@ -175,8 +178,9 @@ def request_add_user(body: AddUserRequest,
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return result[0]
     else:
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return {"message": "Only admins can add users"}
+        return JSONResponse(status_code=401, content={
+            "message": "Only admins can add users"
+        })
 
 
 @app.post('/users/remove_user',
@@ -184,7 +188,7 @@ def request_add_user(body: AddUserRequest,
           response_model=RemoveUserSuccessResponse,
           responses={
               401: {
-                  "model": RemoveUserUnauthorizedResponse
+                  "model": UnauthorizedResponse
               },
               403: {
                   "model": NotAuthenticated
@@ -199,8 +203,9 @@ def request_remove_user(body: RemoveUserRequest,
                         Authorization: str = Header(None)):
     jwt_response = validate_jwt(Authorization)
     if jwt_response['status_code'] != 200:
-        response.status_code = status.HTTP_403_FORBIDDEN
-        return {"message": "Not authenticated"}
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
     if 'SERUMS_ADMIN' in jwt_response['user_type'] \
             or 'HOSPITAL_ADMIN' in jwt_response['user_type']:
         results = remove_user(body.serums_id,
@@ -211,5 +216,6 @@ def request_remove_user(body: RemoveUserRequest,
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             return results[0]
     else:
-        response.status_code = status.HTTP_401_UNAUTHORIZED
-        return {"message": "Only admins can add users"}
+        return JSONResponse(status_code=401, content={
+            "message": "Only admins can remove users"
+        })
