@@ -25,6 +25,7 @@ from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
 from components.users.add_or_remove_users import add_user, remove_user
 from components.ml.data_for_ml import get_patient_data_for_ml
+from components.search.search import search_for_serums_id
 from components.jwt.validate import validate_jwt
 
 responses = {
@@ -236,7 +237,25 @@ def get_ml_data(response: Response, Authorization: str = Header(None)):
           tags=['SEARCH'],
           responses=responses,
           dependencies=[Depends(JWTBearer())])
-def search_for_serums_id(body: SearchRequest,
-                         response: Response,
-                         Authorization: str = Header(None)):
-    pass
+def get_search_for_serums_id(body: SearchRequest,
+                             response: Response,
+                             Authorization: str = Header(None)):
+    jwt_response = validate_jwt(Authorization)
+    if jwt_response['status_code'] != 200:
+        return JSONResponse(status_code=403, content={
+            "message": "Not authenticated"
+        })
+    if 'MEDICAL_STAFF' in jwt_response['user_type'] or \
+            'HOSPITAL_ADMIN' in jwt_response['user_type'] or \
+            'SERUMS_ADMIN' in jwt_response['user_type']:
+        results = search_for_serums_id(dict(body))
+        if results[1] == 200:
+            return results[0]
+        else:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            return results[0]
+    else:
+        return JSONResponse(status_code=401, content={
+            "message": "Must be either a medical staff or "
+                       "admin to search for users"
+        })

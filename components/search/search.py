@@ -57,7 +57,7 @@ def get_serums_id(hospital_id: str, patient_id: int, key_name: str):
         return None
 
 
-def search_for_serums_id(body):
+def search_for_serums_id(body: dict):
     """
     Search function to find a patient's Serums id based on \
     information provided such as: name, dob, gender, native patient id, etc.
