@@ -79,3 +79,42 @@ def test_get_multi_hospital_tags():
     assert res.status_code == 200
     expected_keys = ['FCRB', 'USTAN', 'ZMC']
     assert sorted(dict(res.json()).keys()) == sorted(expected_keys)
+
+
+def test_add_user():
+    admin_header = {
+        'Authorization': 'Bearer ' + admin_jwt
+    }
+    unauthorized_header = {
+        'Authorization': 'Bearer ' + patient_jwt
+    }
+    body = {
+        "serums_id": 26538,
+        "patient_id": 1923893,
+        "hospital_id": "USTAN"
+    }
+    del_body = {
+        "serums_id": 26538,
+        "hospital_ids": ["USTAN"]
+    }
+    # Remove user if necessary
+    requests.post(URL + 'users/remove_user',
+                  json=del_body,
+                  headers=admin_header)
+    unauthorized_res = requests.post(URL + 'users/add_user',
+                                     json=body,
+                                     headers=unauthorized_header)
+    no_header_res = requests.post(URL + 'users/add_user', json=body)
+    authorized_res = requests.post(URL + 'users/add_user',
+                                   json=body,
+                                   headers=admin_header)
+    assert unauthorized_res.status_code == 401
+    print(dict(unauthorized_res.json()))
+    assert dict(unauthorized_res.json())['message'] == \
+        "Only admins can add users"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert dict(authorized_res.json())['message'] == \
+        "User added correctly"
