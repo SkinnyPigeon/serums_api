@@ -18,7 +18,8 @@ from models.request_fields import HelloResponse, \
     AddUserSuccessResponse, \
     RemoveUserRequest, \
     RemoveUserSuccessResponse, \
-    MLSuccessResponse
+    MLSuccessResponse, \
+    SearchRequest
 from components.staff.departments import get_departments
 from components.staff.verify_staff_member import get_department_of_staff_member
 from components.tags.tags import get_tags
@@ -229,3 +230,13 @@ def get_ml_data(response: Response, Authorization: str = Header(None)):
         return JSONResponse(status_code=401, content={
             "message": "Only patients can access their own ML data"
         })
+
+
+@app.post('/search/serums_id',
+          tags=['SEARCH'],
+          responses=responses,
+          dependencies=[Depends(JWTBearer())])
+def search_for_serums_id(body: SearchRequest,
+                         response: Response,
+                         Authorization: str = Header(None)):
+    pass

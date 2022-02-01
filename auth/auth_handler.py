@@ -32,7 +32,6 @@ class JWTBearer(HTTPBearer):
         isTokenValid: bool = False
         try:
             payload = validate_jwt(jwt)
-            print(payload)
         except Exception:
             payload = None
         if payload['status_code'] == 200:
