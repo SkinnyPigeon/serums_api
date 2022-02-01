@@ -1,3 +1,4 @@
+from email import header
 import requests
 from tests.test_jwt_validation import JWT as patient_jwt
 from tests.test_valid_staff_jwt import right_jwt as staff_jwt
@@ -244,3 +245,58 @@ def test_search():
     assert wrong_details_res.status_code == 500
     assert wrong_details_res.json() == \
         {"message": "Unable to find a patient with those details"}
+
+
+def test_get_sphr():
+    body = {
+        "serums_id": 117,
+        "tags": [
+            "patient_details",
+            "chemotherapy"
+        ],
+        "hospital_ids": [
+            "USTAN"
+        ]
+    }
+    unauthorized_body = body.copy()
+    unauthorized_body['serums_id'] = 118
+    unauthorized_res = requests.post(URL +
+                                     'smart_patient_health_record/get_sphr',
+                                     headers=patient_header,
+                                     json=unauthorized_body)
+    no_header_res = requests.post(URL +
+                                  'smart_patient_health_record/get_sphr',
+                                  json=body)
+    authorized_res = requests.post(URL +
+                                   'smart_patient_health_record/get_sphr',
+                                   headers=patient_header,
+                                   json=body)
+    staff_res = requests.post(URL + 'smart_patient_health_record/get_sphr',
+                              headers=staff_header,
+                              json=body)
+    assert unauthorized_res.status_code == 401
+    assert dict(unauthorized_res.json())['message'] == \
+        "Patients can only access their own records, "\
+        "please check the serums id in request body"
+    assert no_header_res.status_code == 403
+    assert dict(no_header_res.json())['detail'] == \
+        "Not authenticated"
+    assert authorized_res.status_code == 200
+    assert staff_res.status_code == 200
+    assert staff_res.json() != authorized_res.json()
+    staff_data = dict(staff_res.json())
+    assert list(staff_data['USTAN'].keys()) == ['ustan.general']
+    authorized_data = dict(authorized_res.json())
+    assert len(authorized_data['USTAN'].keys()) > 1
+
+
+# def test_get_encrypted_sphr():
+#     pass
+
+
+# def test_get_data_vault():
+#     pass
+
+
+# def test_get_encrypted_data_vault():
+#     pass

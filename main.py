@@ -292,7 +292,7 @@ def get_the_unencrypted_sphr(body: SPHRRequest,
                        "please check the serums id in request body"
         })
     patient_data, proof_id = get_patient_data(
-        jwt_response['serums_id'],
+        body.serums_id,
         body.hospital_ids,
         body.tags,
         Authorization
@@ -324,7 +324,7 @@ def get_the_encrypted_sphr(body: SPHRRequestEncrypted,
                        "please check the serums id in request body"
         })
     patient_data, proof_id = get_patient_data(
-        jwt_response['serums_id'],
+        body.serums_id,
         body.hospital_ids,
         body.tags,
         Authorization
@@ -359,7 +359,7 @@ def get_the_unencrypted_data_vault(body: SPHRRequest,
                        "please check the serums id in request body"
         })
     patient_data, proof_id = get_patient_data(
-        jwt_response['serums_id'],
+        body.serums_id,
         body.hospital_ids,
         body.tags,
         Authorization
@@ -394,7 +394,7 @@ def get_the_encrypted_data_vault(body: SPHRRequestEncrypted,
                        "please check the serums id in request body"
         })
     patient_data, proof_id = get_patient_data(
-        jwt_response['serums_id'],
+        body.serums_id,
         body.hospital_ids,
         body.tags,
         Authorization

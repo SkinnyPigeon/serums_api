@@ -124,6 +124,7 @@ def get_valid_tags(jwt: str, patient_serums_id: int):
     all_rules = []
     jwt_response = validate_jwt(jwt)
     requestor_type = jwt_response['user_type']
+    jwt = jwt.replace("Bearer ", "")
     if validate_doctor(requestor_type):
         doctor = get_department_of_staff_member(
             jwt_response['hospital_id'],
