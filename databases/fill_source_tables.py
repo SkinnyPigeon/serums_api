@@ -14,7 +14,8 @@ engine = create_engine(
     f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
 )
 
-directories = ['ustan', 'fcrb']
+directories = ['ustan', 'fcrb', 'zmc']
+
 ustan_tables = [
     'serums_ids',
     'cycles',
@@ -46,6 +47,32 @@ fcrb_tables = [
     'vital_signs'
 ]
 
+zmc_tables = [
+    'address',
+    'alcohol_use',
+    'allergies',
+    'bloodpressure',
+    'complaints_and_diagnosis',
+    'documents',
+    'drug_use',
+    'functional_or_mental_state',
+    'hospital_doctors',
+    'images',
+    'living_situation',
+    'measurements',
+    'medical_aids_and_tools',
+    'medication_agreements',
+    'medication_use',
+    'patient_details',
+    'registered_events',
+    'serums_ids',
+    'tags',
+    'tobacco_use',
+    'translated_tags',
+    'warning',
+    'wearable'
+]
+
 for directory in directories:
     csv_path = f'{project_folder}/databases/data/{directory}/'
     print(f"{directory.upper()} TABLES")
@@ -54,6 +81,8 @@ for directory in directories:
         tables = ustan_tables
     elif directory == 'fcrb':
         tables = fcrb_tables
+    elif directory == 'zmc':
+        tables = zmc_tables
 
     for table in tables:
         print(f"FILLING TABLE: {table}")

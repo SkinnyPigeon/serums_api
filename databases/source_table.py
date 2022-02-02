@@ -447,6 +447,28 @@ class ZMC_Hospital_Doctors(Base):
     department_name = Column(String)
 
 
+class ZMCAddress(Base):
+    __tablename__ = 'address'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(Integer)
+    pstlz = Column(String)
+    ort = Column(String)
+    stras = Column(String)
+    telf1 = Column(BigInteger)
+
+
+class ZMCMeasurements(Base):
+    __tablename__ = 'measurements'
+    __table_args__ = {'schema': 'zmc'}
+    id = Column(Integer, primary_key=True)
+    patnr = Column(Integer)
+    lengt = Column(Integer)
+    gewct = Column(Integer)
+    bmi = Column(Numeric)
+    date = Column(DateTime(timezone=False))
+
+
 class ZMC_Wearable(Base):
     __tablename__ = 'wearable'
     __table_args__ = {'schema': 'zmc'}
@@ -661,13 +683,18 @@ class ZMC_Patient_Details(Base):
     __table_args__ = {'schema': 'zmc'}
     id = Column(Integer, primary_key=True)
     patnr = Column(BigInteger)
+    gschl = Column(String(10))
     nname = Column(String(40))
     nnams = Column(String(40))
     vname = Column(String(6))
     titel = Column(String(6))
-    gschl = Column(String(10))
+    namzu = Column(String(8))
     gbdat = Column(DateTime(timezone=False))
+    gbnam = Column(String(30))
+    gbnas = Column(String(30))
+    gland = Column(String(2))
     natio = Column(String(3))
+    land = Column(String(2))
 
 
 class ZMC_TAGS(Base):
