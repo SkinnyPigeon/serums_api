@@ -11,7 +11,7 @@ PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
 
 engine = create_engine(
-    f'postgresql://root:{PASSWORD}@localhost:{PORT}/source'
+    f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
 )
 
 directories = ['ustan']
