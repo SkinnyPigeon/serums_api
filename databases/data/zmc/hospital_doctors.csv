@@ -1,0 +1,16 @@
+serums_id,staff_id,name,department_id,department_name
+376,7000,Lucas De Vries,1,Emergency
+7001,7001,Milan Van de Berg,1,Emergency
+7002,7002,Emma Bakker,1,Emergency
+7003,7003,Sophie Janssen,1,Emergency
+7004,7004,Levi Van Dijk,2,Surgery
+7007,7007,Julia Visser,2,Surgery
+7006,7006,Sem Jansen,2,Surgery
+7007,7007,Mila Meyer,3,Consultant
+7008,7008,Anna Smit,3,Consultant
+7009,7009,Daan De Jong,3,Consultant
+122,122,Leon Jansen,4,MEDICAL_STAFF
+123,7002,Emma Bakker,5,HOSPITAL_ADMIN
+46,46,Sem Smit,6,SERUMS_ADMIN
+154,154,adminSelkie1@zmc.com,6,SERUMS_ADMIN
+157,157,adminSelkie1@zmc.com,5,HOSPITAL_ADMIN
