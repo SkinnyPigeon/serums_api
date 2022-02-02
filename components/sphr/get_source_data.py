@@ -1,4 +1,5 @@
 from control_files.tags.ustan import ustan_tags
+from control_files.tags.fcrb import fcrb_tags
 from components.utils.class_search import get_class_by_name
 from components.connection.create_connection import setup_connection
 from components.utils.convert_to_dicts import tuples_as_dict
@@ -30,6 +31,8 @@ def tag_picker(hospital_id: str):
     """
     if hospital_id.lower() == 'ustan':
         return ustan_tags
+    elif hospital_id.lower() == 'fcrb':
+        return fcrb_tags
 
 
 def select_tags(tags_list: list, request_tags: list):

@@ -3,6 +3,7 @@ from components.utils.class_search import get_class_by_name
 from components.utils.convert_dtypes import convert_dates_to_string, \
                                             convert_decimal_to_float
 from control_files.search_details.ustan import ustan_patient_details
+from control_files.search_details.fcrb import fcrb_patient_details
 from sqlalchemy.orm.exc import NoResultFound
 import pandas as pd
 
@@ -20,8 +21,10 @@ def search_field_picker(hospital: str):
                                     terms to their native values within a \
                                     hospital's system
     """
-    if hospital == 'ustan':
+    if hospital.lower() == 'ustan':
         return ustan_patient_details
+    elif hospital.lower() == 'fcrb':
+        return fcrb_patient_details
 
 
 def get_serums_id(hospital_id: str, patient_id: int, key_name: str):

@@ -1,5 +1,7 @@
 from control_files.keys_and_sats.ustan.keys import ustan_keys
 from control_files.keys_and_sats.ustan.sats import ustan_sats
+from control_files.keys_and_sats.fcrb.keys import fcrb_keys
+from control_files.keys_and_sats.fcrb.sats import fcrb_sats
 import datetime
 import decimal
 
@@ -21,6 +23,8 @@ def pick_sats_and_keys(hospital_id: str):
     """
     if hospital_id.lower() == 'ustan':
         return ustan_sats, ustan_keys
+    elif hospital_id.lower() == 'fcrb':
+        return fcrb_sats, fcrb_keys
 
 
 def process_value(value):
