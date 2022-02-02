@@ -47,7 +47,7 @@ fcrb_tables = [
 ]
 
 for directory in directories:
-    csv_path = f'{project_folder}api/databases/data/{directory}/'
+    csv_path = f'{project_folder}/databases/data/{directory}/'
     print(f"{directory.upper()} TABLES")
 
     if directory == 'ustan':
