@@ -17,7 +17,7 @@ PASSWORD = os.getenv('PGPASSWORD')
 
 Base = declarative_base()
 engine = create_engine(
-    f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
+    f'postgresql://root:{PASSWORD}@localhost:{PORT}/source'
 )
 if not database_exists(engine.url):
     create_database(engine.url)

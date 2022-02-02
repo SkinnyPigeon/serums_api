@@ -19,7 +19,7 @@ def setup_connection(schema: str):
                 types of operations within the database
     """
     engine = create_engine(
-        f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
+        f'postgresql://root:{PASSWORD}@localhost:{PORT}/source'
     )
     metadata = MetaData(schema=schema.lower(), bind=engine)
     metadata.reflect(engine)

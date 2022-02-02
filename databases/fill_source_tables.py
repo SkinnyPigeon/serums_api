@@ -11,7 +11,7 @@ PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
 
 engine = create_engine(
-    f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
+    f'postgresql://root:{PASSWORD}@localhost:{PORT}/source'
 )
 
 directories = ['ustan']
@@ -30,13 +30,13 @@ ustan_tables = [
 ]
 
 for directory in directories:
-    print(f"DIRECTORY: {directory}")
-    csv_path = f'{project_folder}/databases/data/{directory}/'
+    csv_path = f'{project_folder}api/databases/data/{directory}/'
 
     if directory == 'ustan':
         tables = ustan_tables
 
     for table in tables:
+        print(f"FILLING TABLE: {table}")
         try:
             with open(f"{csv_path}{table}.csv", 'r') as csv:
                 df = pd.read_csv(csv)
@@ -59,3 +59,4 @@ for directory in directories:
             break
 
 engine.dispose()
+print("FINISHED FILLING DATABASES")
