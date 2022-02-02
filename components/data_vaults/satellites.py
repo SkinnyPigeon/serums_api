@@ -2,6 +2,8 @@ from control_files.keys_and_sats.ustan.keys import ustan_keys
 from control_files.keys_and_sats.ustan.sats import ustan_sats
 from control_files.keys_and_sats.fcrb.keys import fcrb_keys
 from control_files.keys_and_sats.fcrb.sats import fcrb_sats
+from control_files.keys_and_sats.zmc.keys import zmc_keys
+from control_files.keys_and_sats.zmc.sats import zmc_sats
 import datetime
 import decimal
 
@@ -25,6 +27,8 @@ def pick_sats_and_keys(hospital_id: str):
         return ustan_sats, ustan_keys
     elif hospital_id.lower() == 'fcrb':
         return fcrb_sats, fcrb_keys
+    elif hospital_id.lower() == 'zmc':
+        return zmc_sats, zmc_keys
 
 
 def process_value(value):

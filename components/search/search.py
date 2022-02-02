@@ -4,6 +4,7 @@ from components.utils.convert_dtypes import convert_dates_to_string, \
                                             convert_decimal_to_float
 from control_files.search_details.ustan import ustan_patient_details
 from control_files.search_details.fcrb import fcrb_patient_details
+from control_files.search_details.zmc import zmc_patient_details
 from sqlalchemy.orm.exc import NoResultFound
 import pandas as pd
 
@@ -25,6 +26,8 @@ def search_field_picker(hospital: str):
         return ustan_patient_details
     elif hospital.lower() == 'fcrb':
         return fcrb_patient_details
+    elif hospital.lower() == 'zmc':
+        return zmc_patient_details
 
 
 def get_serums_id(hospital_id: str, patient_id: int, key_name: str):
