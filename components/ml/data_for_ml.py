@@ -37,6 +37,7 @@ def select_patient_data(
     df = pd.DataFrame([x for x in data])
     df = convert_dates_to_string(df)
     df = convert_decimal_to_float(df)
+    connection['session'].close()
     connection['engine'].dispose()
     return df.to_dict('index')
 
@@ -83,11 +84,14 @@ def get_patient_data_for_ml(serums_id: int):
                 key_name
             )
             results[table] = data
+        connection['session'].close()
         connection['engine'].dispose()
         return results, 200
     except NoResultFound as n:
+        connection['session'].close()
         connection['engine'].dispose()
         return {"message": "Patient not found with that Serums ID"}, 500
     except Exception as e:
+        connection['session'].close()
         connection['engine'].dispose()
         return {"error": str(e)}, 500

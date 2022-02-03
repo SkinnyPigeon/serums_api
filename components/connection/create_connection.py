@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.pool import NullPool
 import os
 
 PORT = os.getenv('PGPORT')
@@ -19,7 +20,8 @@ def setup_connection(schema: str):
                 types of operations within the database
     """
     engine = create_engine(
-        f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
+        f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source',
+        poolclass=NullPool
     )
     metadata = MetaData(schema=schema.lower(), bind=engine)
     metadata.reflect(engine)

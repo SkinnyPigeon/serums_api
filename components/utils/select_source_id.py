@@ -22,6 +22,7 @@ def select_source_patient_id_name(hospital_id: str):
     connection = setup_connection(hospital_id)
     metadata = connection['metadata']
     table_dict = dict.fromkeys(metadata.sorted_tables)
+    connection['session'].close()
     connection['engine'].dispose()
     for keys, values in table_dict.items():
         if keys.name == 'serums_ids':

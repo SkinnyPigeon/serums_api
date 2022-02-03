@@ -21,6 +21,7 @@ def select_source_patient_id_name(schema: str):
     connection = setup_connection(schema)
     metadata = connection['metadata']
     table_dict = dict.fromkeys(metadata.sorted_tables)
+    connection['session'].close()
     connection['engine'].dispose()
     for keys, values in table_dict.items():
         if keys.name == 'serums_ids':
@@ -76,6 +77,7 @@ def remove_user(serums_id: int, hospital_ids: list):
                 where(serums_ids_table.c.serums_id == serums_id)
             res = connection['engine'].execute(stmt)
             deleted_user = res.rowcount
+            connection['session'].close()
             connection['engine'].dispose()
             if deleted_user == 0:
                 response[hospital_id.lower()] = {
@@ -87,6 +89,7 @@ def remove_user(serums_id: int, hospital_ids: list):
                                f"{hospital_id.upper()}"
                 }
         except Exception as e:
+            connection['session'].close()
             connection['engine'].dispose()
             return {
                 "message": f"Error removing user from {hospital_id}",
@@ -121,9 +124,11 @@ def add_user(serums_id: int, patient_id: int, hospital_id: str):
                     'serums_id': serums_id
                 }))
         connection['engine'].execute(stmt)
+        connection['session'].close()
         connection['engine'].dispose()
         return {"message": "User added correctly"}, 200
     except IntegrityError:
+        connection['session'].close()
         connection['engine'].dispose()
         return {
             "message": "User with that Serums ID already exists"

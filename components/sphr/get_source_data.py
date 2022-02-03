@@ -95,6 +95,7 @@ def select_tabular_patient_data(tag_definition: dict,
                 filter_by(**{key_name: patient_id}).all()
         for row in result:
             data.append(tuples_as_dict(row, fields))
+        connection['session'].close()
         connection['engine'].dispose()
     except InvalidRequestError:
         # This is where foreign key lookups are handled for the FCRB use case.
@@ -123,6 +124,7 @@ def select_tabular_patient_data(tag_definition: dict,
                 filter_by(**{foreign_key: row[0]}).all()
             for row in result:
                 data.append(tuples_as_dict(row, fields))
+        connection['session'].close()
         connection['engine'].dispose()
     return data
 

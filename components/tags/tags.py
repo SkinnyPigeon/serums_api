@@ -31,8 +31,10 @@ def get_tags(hospital_id):
         results = {}
         results['tags'] = tags[0]
         results['translated'] = translate_tags[0]
+        connection['session'].close()
         connection['engine'].dispose()
         return results
     except Exception as e:
+        connection['session'].close()
         connection['engine'].dispose()
         return {"error": str(e)}

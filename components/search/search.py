@@ -110,17 +110,21 @@ def search_for_serums_id(body: dict):
                 )
                 df['serums_id'] = serums_id
                 ids.append(df.to_dict('index')[0])
+                connection['session'].close()
                 connection['engine'].dispose()
             if len(ids) > 0:
                 return ids, 200
             else:
                 return {"message": "No patient found with those details"}, 500
         except NoResultFound:
+            connection['session'].close()
             connection['engine'].dispose()
             return {"message": "No patient found with those details"}, 500
         except Exception as e:
+            connection['session'].close()
             connection['engine'].dispose()
             return {"message": str(e)}, 500
     else:
+        connection['session'].close()
         connection['engine'].dispose()
         return {"message": "Please include at least one search term"}, 500
