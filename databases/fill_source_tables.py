@@ -4,14 +4,16 @@ import subprocess
 import pandas as pd
 import sqlalchemy
 
+
 project_folder = subprocess.check_output("pwd", shell=True).\
                             decode("utf-8").rstrip()
 
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
+ALCHEMY_USER = os.getenv('ALCHEMY_USER')
 
 engine = create_engine(
-    f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source'
+    f'postgresql://{ALCHEMY_USER}:{PASSWORD}@localhost:{PORT}/source'
 )
 
 directories = ['ustan', 'fcrb', 'zmc']
@@ -74,7 +76,7 @@ zmc_tables = [
 ]
 
 for directory in directories:
-    csv_path = f'{project_folder}/databases/data/{directory}/'
+    csv_path = f'{project_folder}api/databases/data/{directory}/'
     print(f"{directory.upper()} TABLES")
 
     if directory == 'ustan':

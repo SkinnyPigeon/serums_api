@@ -6,6 +6,7 @@ import os
 
 PORT = os.getenv('PGPORT')
 PASSWORD = os.getenv('PGPASSWORD')
+ALCHEMY_USER = os.getenv('ALCHEMY_USER')
 
 
 def setup_connection(schema: str):
@@ -20,7 +21,7 @@ def setup_connection(schema: str):
                 types of operations within the database
     """
     engine = create_engine(
-        f'postgresql://postgres:{PASSWORD}@localhost:{PORT}/source',
+        f'postgresql://{ALCHEMY_USER}:{PASSWORD}@localhost:{PORT}/source',
         poolclass=NullPool
     )
     metadata = MetaData(schema=schema.lower(), bind=engine)
