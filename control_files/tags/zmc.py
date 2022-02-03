@@ -805,7 +805,7 @@ zmc_allergies_3 = {
 }
 
 zmc_personal_1 = {
-    'tag': 'diagnostic',
+    'tag': 'patient_details',
     'source': 'zmc.measurements',
     'fields': [
         'patnr',
@@ -821,7 +821,7 @@ zmc_personal_1 = {
 }
 
 zmc_personal_2 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.functional_or_mental_state',
     'fields': [
         'patnr',
@@ -836,7 +836,7 @@ zmc_personal_2 = {
 }
 
 zmc_personal_3 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.living_situation',
     'fields': [
         'patnr',
@@ -850,7 +850,7 @@ zmc_personal_3 = {
 }
 
 zmc_personal_4 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.drug_use',
     'fields': [
         'patnr',
@@ -865,7 +865,7 @@ zmc_personal_4 = {
 }
 
 zmc_personal_5 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.alcohol_use',
     'fields': [
         'patnr',
@@ -880,7 +880,7 @@ zmc_personal_5 = {
 }
 
 zmc_personal_6 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.tobacco_use',
     'fields': [
         'patnr',
@@ -895,7 +895,7 @@ zmc_personal_6 = {
 }
 
 zmc_personal_7 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.allergies',
     'fields': [
         'patnr',
@@ -910,7 +910,7 @@ zmc_personal_7 = {
 }
 
 zmc_personal_8 = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'zmc.patient_details',
     'fields': [
         'patnr',

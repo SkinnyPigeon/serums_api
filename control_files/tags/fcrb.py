@@ -409,7 +409,7 @@ fcrb_patient_address = {
 }
 
 fcrb_personal = {
-    'tag': 'personal',
+    'tag': 'patient_details',
     'source': 'fcrb.patient',
     'fields': [
         'patnr',

@@ -1,2 +1,2 @@
 tags
-"{wearable, address, diagnostic, medication, operations, documents, treatments, healthcare_providers, allergies, personal, patient_appointments, drugs_and_alcohol, all}"
+"{wearable, patient_address, diagnostic, medication, operations, documents, treatments, healthcare_providers, allergies, patient_details, patient_appointments, drugs_and_alcohol, all}"
