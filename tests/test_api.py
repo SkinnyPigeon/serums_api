@@ -29,7 +29,7 @@ public_key = "-----BEGIN PUBLIC KEY-----\n"\
              "pAJ84ck6ySK3CIwF0QIDAQAB\n"\
              "-----END PUBLIC KEY-----"
 
-URL = 'http://localhost:8000/'
+URL = 'http://localhost:5000/'
 
 admin_header = {
     'Authorization': 'Bearer ' + admin_jwt
