@@ -6,9 +6,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # networks:
+    #   - serums
     ports:
       - "5000:8000"
     image:
       data_lake
     stdin_open: true
     tty: true
+    
+# networks:
+#   serums:
+#     external: true
