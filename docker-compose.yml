@@ -9,7 +9,7 @@ services:
     # networks:
     #   - serums
     ports:
-      - "5000:8000"
+      - "5000:5000"
     image:
       data_lake
     stdin_open: true

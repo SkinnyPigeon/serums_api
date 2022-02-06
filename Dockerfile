@@ -1,7 +1,7 @@
 FROM ubuntu:bionic
 RUN apt-get update
 RUN apt install postgresql postgresql-contrib -y
-EXPOSE 8000
+EXPOSE 5000
 ENV LC_ALL=C.UTF-8
 ENV LANG=C.UTF-8
 ENV DEBIAN_FRONTEND=nonintercative
@@ -23,7 +23,7 @@ RUN python3.9 -m pip install --upgrade setuptools
 RUN python3.9 -m pip install --upgrade pip
 RUN python3.9 -m pip install --upgrade distlib
 COPY requirements.txt /api/
-RUN apt-get install libpq-dev -y
+RUN apt-get install libpq-dev poppler-utils -y
 RUN python3.9 -m pip install -r /api/requirements.txt
 COPY start_api.sh /scripts/
 RUN chmod +x /scripts/start_api.sh
