@@ -1,7 +1,9 @@
 serums_id,staff_id,name,department_id,department_name
-211,3001,Isla MacDonald,4,MEDICAL_STAFF
-212,3002,Charlotte Wilson,4,MEDICAL_STAFF
-213,3003,Emily Scott,4,MEDICAL_STAFF
-214,3004,Jack Smith,5,HOSPITAL_ADMIN
+211,3001,Isla MacDonald,1,EMERGENCY
+212,3002,Charlotte Wilson,2,CONSULTANT
+213,3003,Emily Scott,2,CONSULTANT
+214,3004,Jack Smith,4,HOSPITAL_ADMIN
+203,1001,Lucas De Vries,5,EMERGENCY_ZMC
+207,2001,Mateu Martin Silva,6,EMERGENCY_FCRB
 217,3005,Oliver Wilson,5,HOSPITAL_ADMIN
 216,3006,Ella Murray,4,MEDICAL_STAFF

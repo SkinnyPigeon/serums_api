@@ -1,5 +1,7 @@
 serums_id,staff_id,name,department_id,department_name
-203,1001,Lucas De Vries,4,MEDICAL_STAFF
-204,1002,Milan Van de Berg,4,MEDICAL_STAFF
-205,1003,Sophie Janssen,4,MEDICAL_STAFF
-206,1004,Julia Visser,5,HOSPITAL_ADMIN
+207,2001,Mateu Martin Silva,1,EMERGENCY
+208,2002,Llora Romero Navarro,2,CONSULTANT
+209,2003,Beatriu Iglesias Delgado,2,CONSULTANT
+210,2004,Dolors Sanz Rubi,4,HOSPITAL_ADMIN
+203,1001,Lucas De Vries,5,EMERGENCY_ZMC
+211,3001,Isla MacDonald,6,EMERGENCY_USTAN

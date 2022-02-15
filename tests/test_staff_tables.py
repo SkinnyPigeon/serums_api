@@ -21,7 +21,7 @@ def test_should_return_none_if_not_correct_staff_id():
 
 def test_should_return_a_list_of_staff():
     results = get_departments('ustan')
-    assert len(results) == 6
+    assert len(results) == 8
     expected_keys = [
         'serums_id',
         'staff_id',
