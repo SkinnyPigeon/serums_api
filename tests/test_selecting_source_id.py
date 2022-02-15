@@ -10,7 +10,7 @@ def test_can_select_source_id_name():
 
 
 def test_can_select_source_id_value():
-    result = select_source_patient_id_value('ustan', 117, 'chi')
+    result = select_source_patient_id_value('ustan', 215, 'chi')
     assert result == 1005549224
 
 

@@ -2,7 +2,7 @@ from components.ml.data_for_ml import get_patient_data_for_ml
 
 
 def test_can_get_patient_data():
-    result = get_patient_data_for_ml(117)
+    result = get_patient_data_for_ml(215)
     assert result[1] == 200
     assert len(result[0]) > 0
 

@@ -64,8 +64,8 @@ First, you must be able to log into the [Flexpass system]\
 Additionally, if you are testing staff members you will need to have \
 rules stored on the blockchain for that member of staff. For instance, \
 In the testing suite, you will see that there are various rules in \
-place for the patient with the id of 117 and the medical professional \
-with an id of 120 within USTAN.
+place for the patient with the id of 215 and the medical professional \
+with an id of 216 within USTAN.
 """
 
 contact = {

@@ -1,15 +1,20 @@
 from components.jwt.validate import validate_jwt
 import pytest
 
-JWT = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoi'\
-      'YWNjZXNzIiwiZXhwIjoxNjQ1MzQ1MDczLCJqdGkiOiJjZTRlYjQ5NjQ2N'\
-      'WY0ZmNhYTU4NzY1ZGI4NGRhMDIxNSIsInVzZXJJRCI6MTE3LCJpc3MiOi'\
-      'JTZXJ1bXNBdXRoZW50aWNhdGlvbiIsImlhdCI6MTY0Mjc1MzA3Mywic3V'\
-      'iIjoicHBwMUB1c3Rhbi5jb20iLCJncm91cElEcyI6WyJQQVRJRU5UIl0s'\
-      'Im9yZ0lEIjoiVVNUQU4iLCJkZXB0SUQiOm51bGwsImRlcHROYW1lIjpud'\
-      'WxsLCJzdGFmZklEIjpudWxsLCJuYW1lIjpudWxsLCJhdWQiOiJodHRwcz'\
-      'ovL3NoY3Muc2VydW1zLmNzLnN0LWFuZHJld3MuYWMudWsvIn0.F6VexwH'\
-      '5rUqrBs31Zm_QQwqCbGRWMK3dlk2gC31xhMU'
+JWT = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
+      "eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwI"\
+      "joxNjQ3NTA1NjYxLCJqdGkiOiI0ZWUyZGY3Zm"\
+      "Y3NTk0MDg1YmE5NjUyYzdkMmQ2M2FlMiIsInV"\
+      "zZXJJRCI6MjE1LCJpc3MiOiJTZXJ1bXNBdXRo"\
+      "ZW50aWNhdGlvbiIsImlhdCI6MTY0NDkxMzY2M"\
+      "Swic3ViIjoidGVzdHBhdGllbnRAdXN0YW4uY2"\
+      "9tIiwiZ3JvdXBJRHMiOlsiUEFUSUVOVCJdLCJ"\
+      "vcmdJRCI6IlVTVEFOIiwiZGVwdElEIjpudWxs"\
+      "LCJkZXB0TmFtZSI6bnVsbCwic3RhZmZJRCI6b"\
+      "nVsbCwibmFtZSI6bnVsbCwiYXVkIjoiaHR0cH"\
+      "M6Ly9zaGNzLnNlcnVtcy5jcy5zdC1hbmRyZXd"\
+      "zLmFjLnVrLyJ9.brv3p2nUZZ9OPwlBeVTnLGb"\
+      "whJ620hYkpog5jqObRP8"
 
 
 # @pytest.mark.skip(reason="The JWT will be stop working")

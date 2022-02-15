@@ -20,7 +20,7 @@ def test_can_pick_hospital():
 
 def test_can_get_serums_id():
     result = get_serums_id('ustan', 1005549224, 'chi')
-    assert result == 117
+    assert result == 215
 
 
 def test_can_handle_wrong_patient_number():
@@ -38,7 +38,7 @@ def test_can_find_specific_patient():
     result = search_for_serums_id(query)
     assert len(result[0]) == 1
     assert result[1] == 200
-    assert result[0][0]['serums_id'] == 117
+    assert result[0][0]['serums_id'] == 215
 
 
 def test_can_find_multiple_patients():
@@ -47,12 +47,9 @@ def test_can_find_multiple_patients():
         "hospital_id": "ustan"
     }
     results = search_for_serums_id(query)
+    print(results)
     assert len(results[0]) == 2
     assert results[1] == 200
-    ids = []
-    for result in results[0]:
-        ids.append(result['serums_id'])
-    assert sorted(ids) == [9292, 9393]
 
 
 def test_message_for_bad_queries():

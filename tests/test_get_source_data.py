@@ -88,7 +88,7 @@ def test_setup_for_query():
     proof_id, valid_tags = setup_for_query(
         JWT,
         tags,
-        117,
+        215,
         hospital_ids
     )
     assert proof_id[:6] == 'PROOF_'
@@ -97,7 +97,7 @@ def test_setup_for_query():
     proof_id, valid_tags = setup_for_query(
         staff_jwt,
         tags,
-        117,
+        215,
         hospital_ids
     )
     assert proof_id[:6] == 'PROOF_'
@@ -106,7 +106,7 @@ def test_setup_for_query():
 
 def test_get_patient_data():
     result, proof_id = get_patient_data(
-        117,
+        215,
         ['ustan'],
         ['patient_details'],
         JWT
@@ -142,7 +142,7 @@ def test_get_patient_data():
 
 def test_doctor_can_only_get_allowed_data():
     result, proof_id = get_patient_data(
-        117,
+        215,
         ['ustan'],
         ['patient_details', 'medication', 'wearble'],
         staff_jwt

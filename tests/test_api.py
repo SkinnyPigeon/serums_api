@@ -5,19 +5,18 @@ from tests.test_valid_staff_jwt import right_jwt as staff_jwt
 
 admin_jwt = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9."\
             "eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwI"\
-            "joxNjQ2MzAyMTM5LCJqdGkiOiI5NTBkYzEzMj"\
-            "A1MjQ0N2VhOTQ0YzQ5Mzk5N2JhODE0NiIsInV"\
-            "zZXJJRCI6MTIxLCJpc3MiOiJTZXJ1bXNBdXRo"\
-            "ZW50aWNhdGlvbiIsImlhdCI6MTY0MzcxMDEzO"\
-            "Swic3ViIjoiaG9zcGFkbTFAdXN0YW4uY29tIi"\
-            "wiZ3JvdXBJRHMiOlsiSE9TUElUQUxfQURNSU4"\
-            "iXSwib3JnSUQiOiJVU1RBTiIsImRlcHRJRCI6"\
-            "NSwiZGVwdE5hbWUiOiJIT1NQSVRBTF9BRE1JT"\
-            "iIsInN0YWZmSUQiOjEyMSwibmFtZSI6Ik9saX"\
-            "ZlciBXaWxzb24iLCJhdWQiOiJodHRwczovL3N"\
-            "oY3Muc2VydW1zLmNzLnN0LWFuZHJld3MuYWMu"\
-            "dWsvIn0.JAYsr1P5EBO04C7BggojLS8Kvc0en"\
-            "eg0H2PrHtvmrqs"
+            "joxNjQ3NTA2MDE3LCJqdGkiOiI0NGNjMmVkND"\
+            "UyNGM0YmUzYWVkODkyMTk5Y2NhMzU4YyIsInV"\
+            "zZXJJRCI6MjE3LCJpc3MiOiJTZXJ1bXNBdXRo"\
+            "ZW50aWNhdGlvbiIsImlhdCI6MTY0NDkxNDAxN"\
+            "ywic3ViIjoidGVzdGFkbWluQHVzdGFuLmNvbS"\
+            "IsImdyb3VwSURzIjpbIkhPU1BJVEFMX0FETUl"\
+            "OIl0sIm9yZ0lEIjoiVVNUQU4iLCJkZXB0SUQi"\
+            "Om51bGwsImRlcHROYW1lIjpudWxsLCJzdGFmZ"\
+            "klEIjpudWxsLCJuYW1lIjpudWxsLCJhdWQiOi"\
+            "JodHRwczovL3NoY3Muc2VydW1zLmNzLnN0LWF"\
+            "uZHJld3MuYWMudWsvIn0.VEA_bH_JpYR7faXF"\
+            "nHNSsNaTx9o3eVwaOXlG8-91k-k"
 
 public_key = "-----BEGIN PUBLIC KEY-----\n"\
              "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCB"\
@@ -241,7 +240,7 @@ def test_search():
             "name": "HERMIONE KOCZUR",
             "date_of_birth": "1954-05-10",
             "gender": 2,
-            "serums_id": 117
+            "serums_id": 215
         }
     ]
     assert authorized_res.json() == expected
@@ -259,7 +258,7 @@ def test_search():
 
 def test_get_sphr():
     body = {
-        "serums_id": 117,
+        "serums_id": 215,
         "tags": [
             "patient_details",
             "chemotherapy"
@@ -302,7 +301,7 @@ def test_get_sphr():
 
 def test_get_encrypted_sphr():
     body = {
-        "serums_id": 117,
+        "serums_id": 215,
         "tags": [
             "patient_details",
             "chemotherapy"
@@ -344,7 +343,7 @@ def test_get_encrypted_sphr():
 
 def test_get_data_vault():
     body = {
-        "serums_id": 117,
+        "serums_id": 215,
         "tags": [
             "patient_details",
             "chemotherapy"
@@ -384,7 +383,7 @@ def test_get_data_vault():
 
 def test_get_encrypted_data_vault():
     body = {
-        "serums_id": 117,
+        "serums_id": 215,
         "tags": [
             "patient_details",
             "chemotherapy"

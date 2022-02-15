@@ -1,16 +1,5 @@
 serums_id,staff_id,name,department_id,department_name
-375,5000,Mateu Martin Silva,1,Emergency
-5001,5001,Lluc Garcia Torres,1,Emergency     
-5002,5002,Llora Romero Navarro,1,Emergency     
-5003,5003,Laia Ortega Morales,1,Emergency
-5004,5004,Neus Ramos Serrano,2,Surgery
-5005,5005,Beatriu Iglesias Delgado,2,Surgery
-5006,5006,Carles Sanchez Martinez,2,Surgery
-5007,5007,Dolors Sanz Rubi,3,Consultant
-5008,5008,Francesc Diaz Ruiz,3,Consultant
-5009,5009,Àlex Alonso Romero,3,Consultant
-124,124,Jorge Sanchez Romero,4,MEDICAL_STAFF
-125,125,Àlex Alonso Romero,5,HOSPITAL_ADMIN
-49,49,Llora Romero Morales,6,SERUMS_ADMIN
-153,153,adminSelkie1@fcrb.com,6,SERUMS_ADMIN
-155,155,Mario,6,HOSPITAL_ADMIN
+203,1001,Lucas De Vries,4,MEDICAL_STAFF
+204,1002,Milan Van de Berg,4,MEDICAL_STAFF
+205,1003,Sophie Janssen,4,MEDICAL_STAFF
+206,1004,Julia Visser,5,HOSPITAL_ADMIN

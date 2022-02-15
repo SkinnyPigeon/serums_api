@@ -1349,7 +1349,7 @@ class SearchResponse(BaseModel):
                     "name": "HERMIONE KOCZUR",
                     "date_of_birth": "1954-05-10",
                     "gender": 2,
-                    "serums_id": 117
+                    "serums_id": 215
                 }
             ]
         }
@@ -1363,7 +1363,7 @@ class SPHRRequest(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "serums_id": 117,
+                "serums_id": 215,
                 "tags": [
                     "patient_details",
                     "chemotherapy"
@@ -1394,7 +1394,7 @@ class SPHRRequestEncrypted(BaseModel):
     class Config:
         schema_extra = {
             "example": {
-                "serums_id": 117,
+                "serums_id": 215,
                 "tags": [
                     "patient_details"
                 ],

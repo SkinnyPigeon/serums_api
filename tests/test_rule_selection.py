@@ -7,7 +7,7 @@ import pytest
 
 
 def test_can_get_rules():
-    rules = get_rules(right_jwt, 117, 120)
+    rules = get_rules(right_jwt, 215, 216)
     assert len(rules) > 0
     assert type(rules[0]) == dict
     assert rules[0]['action'] in ['ALLOW', 'DENY']
@@ -19,7 +19,7 @@ def test_can_validate_doctor():
 
 
 def test_can_sum_up_rules():
-    rules = get_rules(right_jwt, 117, 120)
+    rules = get_rules(right_jwt, 215, 216)
     tags = sum_up_rules(rules)
     assert len(tags) > 0
     assert len(tags) < len(rules)
@@ -28,7 +28,7 @@ def test_can_sum_up_rules():
 
 
 def test_can_get_valid_tags():
-    tags, rule_ids = get_valid_tags(right_jwt, 117)
+    tags, rule_ids = get_valid_tags(right_jwt, 215)
     assert len(tags) > 0
     assert 'patient_details' in tags
     assert 'medication' not in tags

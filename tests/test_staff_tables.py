@@ -3,13 +3,13 @@ from components.staff.departments import get_department_of_staff_member, \
 
 
 def test_should_return_existing_member_of_staff():
-    result = get_department_of_staff_member('ustan', 81)
+    result = get_department_of_staff_member('ustan', 216)
     expected = {
-        'serums_id': 81,
-        'staff_id': 81,
-        'name': 'Charlotte Wilson',
-        'department_id': 4,
-        'department_name': 'MEDICAL_STAFF'
+        "serums_id": 216,
+        "staff_id": 3006,
+        "name": "Ella Murray",
+        "department_id": 4,
+        "department_name": "MEDICAL_STAFF"
     }
     assert result == expected
 
@@ -21,7 +21,7 @@ def test_should_return_none_if_not_correct_staff_id():
 
 def test_should_return_a_list_of_staff():
     results = get_departments('ustan')
-    assert len(results) == 15
+    assert len(results) == 6
     expected_keys = [
         'serums_id',
         'staff_id',

@@ -1,20 +1,7 @@
 serums_id,staff_id,name,department_id,department_name
-364,6000,Isla MacDonald,1,Emergency 
-391,6001,Charles Stewart,1,Emergency     
-390,6002,Oliver Wilson,3,Consultant     
-392,6003,Emily Scott,1,Emergency 
-387,6004,Ella Murray,2,Surgery   
-394,6006,James Campbell,4,Admin   
-393,6006,Charlotte Watson,4,Admin   
-395,6007,Amelia Clark,4,Admin
-6008,6008,Noah Thomson,3,Consultant
-6009,6009,Jack Smith,2,Surgery
-120,120,Charlotte Watson,4,MEDICAL_STAFF
-121,121,Oliver Wilson,5,HOSPITAL_ADMIN
-22,22,Charles Wilson,6,SERUMS_ADMIN
-83,83,adminSelkie1@ustan.com,6,SERUMS_ADMIN
-81,81,Charlotte Wilson,4,MEDICAL_STAFF
-182,200,Edgar Em,4,MEDICAL_STAFF
-183,201,Sue Surg,4,MEDICAL_STAFF
-184,211,Connor Con,4,MEDICAL_STAFF
-151,202,Fred HospAd,5,HOSPITAL_ADMIN
+211,3001,Isla MacDonald,4,MEDICAL_STAFF
+212,3002,Charlotte Wilson,4,MEDICAL_STAFF
+213,3003,Emily Scott,4,MEDICAL_STAFF
+214,3004,Jack Smith,5,HOSPITAL_ADMIN
+217,3005,Oliver Wilson,5,HOSPITAL_ADMIN
+216,3006,Ella Murray,4,MEDICAL_STAFF
