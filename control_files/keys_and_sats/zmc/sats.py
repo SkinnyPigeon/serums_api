@@ -1,26 +1,26 @@
 zmc_sats = {
     "zmc.wearable": {
-        "sat_time_wearable_details": {
-            "columns": [
-                "date"
-            ],
-            "hub": "hub_time"
-        },
         "sat_event_wearable_details": {
             "columns": [
-                "w_time",
-                "w_steps",
-                "w_cad",
-                "sst",
-                "sst_time",
-                "cyc_time",
-                "cyc_steps",
-                "cyc_cad"
+                "patnr",
+                "day_nr",
+                "time_total",
+                "time_passive",
+                "time_active",
+                "time_sit",
+                "time_stand",
+                "time_walk",
+                "time_cycle",
+                "time_hi",
+                "nr_sst",
+                "steps_total",
+                "cadence",
+                "cyc_rot",
+                "cyc_rpm"
             ],
             "hub": "hub_event"
         },
         "links": [
-            "time_event_link"
         ]
     },
     "zmc.complaints_and_diagnosis": {

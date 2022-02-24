@@ -97,7 +97,7 @@ dt1 = ['Resultaten verwijzing orthopedisch onderzoek'
        for _ in range(patnr_count)]
 dt2 = ['Operatieraport vervanging rechter heupgewricht'
        for _ in range(patnr_count)]
-document_list = dt1 + dt2
+document_titles = dt1 + dt2
 d_types = ['orthopedics' for _ in range(2 * patnr_count)]
 dd1 = ['2020.02.14' for _ in range(patnr_count)]
 dd2 = ['2020.03.16' for _ in range(patnr_count)]
@@ -115,7 +115,7 @@ images = {
 }
 documents = {
     'patnr': full_patnr_list,
-    'document_title': document_list,
+    'document_title': document_titles,
     'type': d_types,
     'date': document_dates,
     'document': document_list
