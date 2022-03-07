@@ -110,7 +110,8 @@ def select_tabular_patient_data(tag_definition: dict,
         # the ids of the doctors who treated them and then use those as keys to
         # the table we were originally querying
         foreign_key_table_class = get_class_by_name(
-            tag_definition['key_lookup']['table']
+            tag_definition['key_lookup']['table'],
+            connection['base']
         )
         foreign_key = tag_definition['key_lookup']['key']
         key_entities = []
