@@ -5,3 +5,8 @@ serums_id,staff_id,name,department_id,department_name
 206,1004,Julia Visser,4,HOSPITAL_ADMIN
 207,2001,Mateu Martin Silva,5,EMERGENCY_FCRB
 211,3001,Isla MacDonald,6,EMERGENCY_USTAN
+241,1005,Silvia Middenkamp,10,ORTHOPEDICS
+242,1006,Daan de Jong,11,PHYSIOTHERAPY
+243,1007,Peter Pannenkoek,9,SURGERY
+244,1008,Piet Jan Klaasen,12,CARDIOLOGY
+245,1009,Jan de Groot,8,ONCOLOGY

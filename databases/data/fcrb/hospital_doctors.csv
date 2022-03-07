@@ -5,3 +5,6 @@ serums_id,staff_id,name,department_id,department_name
 210,2004,Dolors Sanz Rubi,4,HOSPITAL_ADMIN
 203,1001,Lucas De Vries,5,EMERGENCY_ZMC
 211,3001,Isla MacDonald,6,EMERGENCY_USTAN
+247,2005,Alex Pons Rivas,7,ENDOCRINOLOGY
+248,2006,Alba Casals Bonet,8,ONCOLOGY
+249,2007,Nil Sanchez Oliver,9,SURGERY
